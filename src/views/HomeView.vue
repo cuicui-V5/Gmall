@@ -1,5 +1,5 @@
 <script setup lang="ts"></script>
 
 <template>
-    <main>欢迎</main>
+    <main>主页</main>
 </template>

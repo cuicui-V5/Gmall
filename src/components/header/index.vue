@@ -8,13 +8,13 @@
                     <p>尚品汇欢迎您！</p>
                     <p>
                         <span>请</span>
-                        <a href="###">登录</a>
-                        <a
-                            href="###"
+                        <RouterLink to="/login">登录</RouterLink>
+                        <RouterLink
+                            to="/register"
                             class="register"
                         >
                             免费注册
-                        </a>
+                        </RouterLink>
                     </p>
                 </div>
                 <div class="typeList">
@@ -32,17 +32,16 @@
         <!--头部第二行 搜索区域-->
         <div class="bottom">
             <h1 class="logoArea">
-                <a
+                <RouterLink
                     class="logo"
                     title="尚品汇"
-                    href="###"
-                    target="_blank"
+                    to="/"
                 >
                     <img
                         src="./images/logo.png"
                         alt=""
                     />
-                </a>
+                </RouterLink>
             </h1>
             <div class="searchArea">
                 <form
@@ -53,10 +52,12 @@
                         type="text"
                         id="autocomplete"
                         class="input-error input-xxlarge"
+                        v-model="keyWord"
                     />
                     <button
                         class="sui-btn btn-xlarge btn-danger"
                         type="button"
+                        @click="search"
                     >
                         搜索
                     </button>
@@ -66,7 +67,22 @@
     </header>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+    import router from "@/router";
+    import { ref } from "vue";
+
+    let keyWord = ref("");
+
+    function search() {
+        router.push({
+            name: "search",
+            params: { kw: keyWord.value || undefined },
+            query: {
+                kw: keyWord.value,
+            },
+        });
+    }
+</script>
 
 <style scoped lang="less">
     .header {
