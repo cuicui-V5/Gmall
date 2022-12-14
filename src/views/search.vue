@@ -11,11 +11,12 @@
 
 <script setup lang="ts">
     import { useRoute } from "vue-router";
-    import requests from "@/api/request";
+    import { reqCategoryList } from "@/api/index";
 
     const router = useRoute();
-    function send() {
-        requests.get("http://baidu.com");
+    async function send() {
+        const res = await reqCategoryList();
+        console.log(res);
     }
 </script>
 
