@@ -1,6 +1,4 @@
 <template>
-    <button @click="add">add</button>
-    <span>{{ store.categoryList }}</span>
     <typeNavVue></typeNavVue>
     <listContainerVue></listContainerVue>
     <todayRecommend></todayRecommend>
@@ -19,11 +17,6 @@
     import like from "./like/index.vue";
     import floor from "./floor/index.vue";
     import brand from "./brand/index.vue";
-    import { useHomeStore } from "@/stores/home";
-    const store = useHomeStore();
-    function add() {
-        store.getCategoryList();
-    }
 </script>
 
 <style scoped lang="less"></style>

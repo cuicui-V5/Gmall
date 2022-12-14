@@ -4,9 +4,9 @@ import { defineStore } from "pinia";
 import { reqCategoryList } from "@/api";
 
 export const useHomeStore = defineStore("home", () => {
-    const categoryList = ref({});
+    const categoryList = ref<any>({});
     async function getCategoryList() {
-        categoryList.value = (await reqCategoryList()).data;
+        categoryList.value = (await reqCategoryList()).data.data;
     }
 
     return { categoryList, getCategoryList };
