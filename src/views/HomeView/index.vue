@@ -10,7 +10,6 @@
 </template>
 
 <script setup lang="ts">
-    import typeNavVue from "@/components/type-nav/index.vue";
     import listContainerVue from "./list-container/index.vue";
     import todayRecommend from "./today-recommend/index.vue";
     import rank from "./rank/index.vue";

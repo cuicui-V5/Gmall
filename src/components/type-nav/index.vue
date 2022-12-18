@@ -4,6 +4,7 @@
         <div
             class="container"
             @mouseleave="clearBGC()"
+            @mouseenter="show()"
         >
             <h2 class="all">全部商品分类</h2>
             <nav class="nav">
@@ -16,75 +17,172 @@
                 <a href="###">有趣</a>
                 <a href="###">秒杀</a>
             </nav>
-            <div class="sort">
-                <div class="all-sort-list2">
+            <Transition name="card">
+                <div
+                    class="sort"
+                    v-show="isShow"
+                >
                     <div
-                        class="item"
-                        v-for="(c1, index) in store.categoryList"
-                        :key="c1.categoryId"
-                        @mouseenter="changeBGC(index)"
-                        :class="{
-                            cur: currentIndex === index,
-                        }"
+                        class="all-sort-list2"
+                        @click="goSearch($event)"
                     >
-                        <h3>
-                            <a href="">{{ c1.categoryName }}</a>
-                        </h3>
                         <div
-                            class="item-list clearfix"
-                            :class="{ display: currentIndex === index }"
+                            class="item"
+                            v-for="(c1, index) in store.categoryList"
+                            :key="c1.categoryId"
+                            @mouseenter="changeBGC(index)"
+                            :class="{
+                                cur: currentIndex === index,
+                            }"
                         >
+                            <h3>
+                                <a
+                                    :data-CategoryName="c1.categoryName"
+                                    :data-Category1Id="c1.categoryId"
+                                >
+                                    {{ c1.categoryName }}
+                                </a>
+                            </h3>
                             <div
-                                class="subitem"
-                                v-for="(c2, index) in c1.categoryChild"
-                                :key="c2.categoryId"
+                                class="item-list clearfix"
+                                :class="{ display: currentIndex === index }"
                             >
-                                <dl class="fore">
-                                    <dt>
-                                        <a href="">{{ c2.categoryName }}</a>
-                                    </dt>
-                                    <dd>
-                                        <em
-                                            v-for="(
-                                                c3, index
-                                            ) in c2.categoryChild"
-                                            :key="c3.categoryId"
-                                        >
-                                            <a href="">{{ c3.categoryName }}</a>
-                                        </em>
-                                    </dd>
-                                </dl>
+                                <div
+                                    class="subitem"
+                                    v-for="(c2, index) in c1.categoryChild"
+                                    :key="c2.categoryId"
+                                >
+                                    <dl class="fore">
+                                        <dt>
+                                            <a
+                                                :data-CategoryName="
+                                                    c2.categoryName
+                                                "
+                                                :data-Category2Id="
+                                                    c2.categoryId
+                                                "
+                                            >
+                                                {{ c2.categoryName }}
+                                            </a>
+                                        </dt>
+                                        <dd>
+                                            <em
+                                                v-for="(
+                                                    c3, index
+                                                ) in c2.categoryChild"
+                                                :key="c3.categoryId"
+                                            >
+                                                <a
+                                                    :data-CategoryName="
+                                                        c3.categoryName
+                                                    "
+                                                    :data-Category3Id="
+                                                        c3.categoryId
+                                                    "
+                                                >
+                                                    {{ c3.categoryName }}
+                                                </a>
+                                            </em>
+                                        </dd>
+                                    </dl>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </Transition>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
+    import router from "@/router";
+    import { useRoute } from "vue-router";
     import { useHomeStore } from "@/stores/home/index";
     import { ref } from "vue";
 
     const store = useHomeStore();
 
-    store.getCategoryList();
+    // store.getCategoryList();
 
     const currentIndex = ref(-1);
+
+    const route = useRoute();
+    // 是否显示三级导航
+    const isShow = ref(true);
+    console.log(route.path);
+
+    if (route.path !== "/") {
+        isShow.value = false;
+    }
+
     // 一级分类的鼠标放上背景色效果
     function changeBGC(i: number) {
         currentIndex.value = i;
     }
     function clearBGC() {
         currentIndex.value = -1;
+        if (route.path !== "/") {
+            isShow.value = false;
+        }
+    }
+    function show() {
+        if (route.path !== "/") {
+            isShow.value = true;
+        }
+    }
+
+    function goSearch(e: MouseEvent) {
+        // 事件委派, 只有点击a标签才生效
+        // console.log(e);
+        const element = e.target as HTMLElement;
+        console.log(element.dataset);
+
+        if (element.tagName === "A") {
+            let location = {
+                name: "search",
+                query: {},
+            };
+            let query: {
+                categoryName: any;
+                category1id?: any;
+                category2id?: any;
+                category3id?: any;
+            } = {
+                categoryName: element.dataset.categoryname,
+            };
+            if (element.dataset.category1id) {
+                query.category1id = element.dataset.category1id;
+            } else if (element.dataset.category2id) {
+                query.category2id = element.dataset.category2id;
+            } else if (element.dataset.category3id) {
+                query.category3id = element.dataset.category3id;
+            }
+            location.query = query;
+            router.push(location);
+        }
     }
 </script>
 
 <style scoped lang="less">
     .type-nav {
         border-bottom: 2px solid #e1251b;
+        a {
+            cursor: pointer;
+        }
 
+        .card-enter-from,
+        .card-leave-to {
+            opacity: 0;
+        }
+        .card-enter-to,
+        .card-leave-from {
+            opacity: 1;
+        }
+        .card-enter-active,
+        .card-leave-active {
+            transition: 0.2s all;
+        }
         .container {
             width: 1200px;
             margin: 0 auto;

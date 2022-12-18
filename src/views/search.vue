@@ -1,5 +1,6 @@
 <template>
     <div>
+        <typeNavVue></typeNavVue>
         <h1>search</h1>
         {{ router.params }}
         <hr />
@@ -14,6 +15,7 @@
     import { reqCategoryList } from "@/api/index";
 
     const router = useRoute();
+
     async function send() {
         const res = await reqCategoryList();
         console.log(res);

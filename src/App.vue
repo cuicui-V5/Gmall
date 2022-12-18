@@ -10,7 +10,11 @@
     import headerVue from "@/components/header/index.vue";
     import footerVue from "@/components/footer/index.vue";
     import { useRoute } from "vue-router";
+    import { useHomeStore } from "@/stores/home/index";
     const router = useRoute();
+    const store = useHomeStore();
+
+    store.getCategoryList();
 </script>
 
 <style scoped lang="less"></style>
