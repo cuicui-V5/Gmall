@@ -69,18 +69,23 @@
 
 <script setup lang="ts">
     import router from "@/router";
+    import { useRoute } from "vue-router";
     import { ref } from "vue";
+
+    const route = useRoute();
 
     let keyWord = ref("");
 
     function search() {
-        router.push({
+        const location = {
             name: "search",
+            query: {},
             params: { kw: keyWord.value || undefined },
-            query: {
-                kw: keyWord.value,
-            },
-        });
+        };
+        if (route.query) {
+            location.query = route.query;
+        }
+        router.push(location);
     }
 </script>
 

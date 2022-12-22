@@ -4,31 +4,22 @@
         <div class="sortList clearfix">
             <div class="center">
                 <!--banner轮播-->
-                <div
-                    class="swiper-container"
-                    id="mySwiper"
+                <swiper
+                    :modules="modules"
+                    :slides-per-view="1"
+                    :space-between="50"
+                    navigation
+                    :loop="true"
+                    :pagination="{ clickable: true }"
+                    :scrollbar="{ draggable: true }"
                 >
-                    <div class="swiper-wrapper">
-                        <div class="swiper-slide">
-                            <img src="./images/home/banner1.jpg" />
-                        </div>
-                        <!-- <div class="swiper-slide">
-                            <img src="./images/home/banner2.jpg" />
-                        </div>
-                        <div class="swiper-slide">
-                            <img src="./images/home/banner3.jpg" />
-                        </div>
-                        <div class="swiper-slide">
-                            <img src="./images/home/banner4.jpg" />
-                        </div> -->
-                    </div>
-                    <!-- 如果需要分页器 -->
-                    <div class="swiper-pagination"></div>
-
-                    <!-- 如果需要导航按钮 -->
-                    <div class="swiper-button-prev"></div>
-                    <div class="swiper-button-next"></div>
-                </div>
+                    <swiper-slide v-for="item in store.bannerList">
+                        <img
+                            :src="item.imgUrl"
+                            alt=""
+                        />
+                    </swiper-slide>
+                </swiper>
             </div>
             <div class="right">
                 <div class="news">
@@ -118,7 +109,20 @@
     </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+    import { useHomeStore } from "@/stores/home";
+    import { Swiper, SwiperSlide } from "swiper/vue";
+    // import Swiper core and required modules
+    import { Navigation, Pagination, Scrollbar, A11y } from "swiper";
+    // Import Swiper styles
+    import "swiper/css";
+    import "swiper/css/navigation";
+    import "swiper/css/pagination";
+    import "swiper/css/scrollbar";
+    const modules = [Navigation, Pagination, Scrollbar, A11y];
+    const store = useHomeStore();
+    store.getBanner();
+</script>
 
 <style scoped lang="less">
     .list-container {

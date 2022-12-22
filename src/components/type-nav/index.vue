@@ -142,6 +142,7 @@
             let location = {
                 name: "search",
                 query: {},
+                params: {},
             };
             let query: {
                 categoryName: any;
@@ -159,6 +160,9 @@
                 query.category3id = element.dataset.category3id;
             }
             location.query = query;
+            if (route.params) {
+                location.params = route.params;
+            }
             router.push(location);
         }
     }

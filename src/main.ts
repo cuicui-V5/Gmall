@@ -4,8 +4,9 @@ import { createPinia } from "pinia";
 import App from "./App.vue";
 import router from "./router";
 import "@/assets/reset.css";
-import "nprogress/nprogress.css";
 
+import "nprogress/nprogress.css";
+import "@/mock/mockServe";
 // 全局组件
 import typeNavVue from "@/components/type-nav/index.vue";
 const app = createApp(App);
