@@ -82,13 +82,12 @@
     import "swiper/css/navigation";
     import "swiper/css/pagination";
     import "swiper/css/scrollbar";
-    import type { floorList } from "@/interface/index";
+    import type { floorListType } from "@/interface/index";
     const modules = [Navigation, Pagination, Scrollbar, A11y];
 
     const { floor } = defineProps<{
-        floor: floorList;
+        floor: floorListType;
     }>();
-    console.log(floor);
 </script>
 
 <style scoped lang="less">

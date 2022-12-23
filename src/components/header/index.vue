@@ -80,7 +80,7 @@
         const location = {
             name: "search",
             query: {},
-            params: { kw: keyWord.value || undefined },
+            params: { keyword: keyWord.value || undefined },
         };
         if (route.query) {
             location.query = route.query;

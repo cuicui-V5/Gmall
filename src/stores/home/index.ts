@@ -2,7 +2,7 @@ import { ref, computed } from "vue";
 import { defineStore } from "pinia";
 // 引入api
 import { reqCategoryList, reqBanner, reqFloor } from "@/api";
-import type { floorList } from "@/interface/index";
+import type { floorListType } from "@/interface/index";
 export const useHomeStore = defineStore("home", () => {
     const categoryList = ref<any>({});
     const bannerList = ref<
@@ -11,7 +11,7 @@ export const useHomeStore = defineStore("home", () => {
             imgUrl: string;
         }[]
     >([]);
-    const floorList = ref<floorList[]>([]);
+    const floorList = ref<floorListType[]>([]);
     async function getCategoryList() {
         categoryList.value = (await reqCategoryList()).data.data;
     }
@@ -27,7 +27,6 @@ export const useHomeStore = defineStore("home", () => {
         if (res.code == 200) {
             floorList.value = res.data;
         }
-        console.log(res);
     }
 
     return {
