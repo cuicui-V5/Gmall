@@ -44,15 +44,13 @@
                 </RouterLink>
             </h1>
             <div class="searchArea">
-                <form
-                    action="###"
-                    class="searchForm"
-                >
+                <div class="searchForm">
                     <input
                         type="text"
                         id="autocomplete"
                         class="input-error input-xxlarge"
                         v-model="keyWord"
+                        @keydown.enter="search"
                     />
                     <button
                         class="sui-btn btn-xlarge btn-danger"
@@ -61,7 +59,7 @@
                     >
                         搜索
                     </button>
-                </form>
+                </div>
             </div>
         </div>
     </header>
@@ -71,7 +69,7 @@
     import router from "@/router";
     import { useRoute } from "vue-router";
     import { ref } from "vue";
-
+    import eventBus from "@/lib/eventBus";
     const route = useRoute();
 
     let keyWord = ref("");
@@ -87,6 +85,9 @@
         }
         router.push(location);
     }
+    eventBus.on("clearKeyword", () => {
+        keyWord.value = "";
+    });
 </script>
 
 <style scoped lang="less">

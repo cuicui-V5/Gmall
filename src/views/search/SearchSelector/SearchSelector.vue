@@ -4,7 +4,10 @@
             <div class="fl key brand">品牌</div>
             <div class="value logos">
                 <ul class="logo-list">
-                    <li v-for="list in store.searchList?.trademarkList">
+                    <li
+                        v-for="list in store.searchList?.trademarkList"
+                        @click="tradeMarkInfo(list)"
+                    >
                         {{ list.tmName }}
                     </li>
                 </ul>
@@ -27,7 +30,7 @@
             <div class="fl value">
                 <ul class="type-list">
                     <li v-for="attr in list.attrValueList">
-                        <a>{{ attr }}</a>
+                        <a @click="attrInfo(attr, list)">{{ attr }}</a>
                     </li>
                 </ul>
             </div>
@@ -40,6 +43,19 @@
     import { useSearchStore } from "@/stores/search";
 
     const store = useSearchStore();
+    const emit = defineEmits(["trademarkInfo", "attrInfo"]);
+
+    const tradeMarkInfo = (trademark: { tmId: number; tmName: string }) => {
+        emit("trademarkInfo", trademark);
+    };
+
+    const attrInfo = (
+        attr: string,
+        list: { attrId: number; attrName: string },
+    ) => {
+        const info = `${list.attrId}:${attr}:${list.attrName}`;
+        emit("attrInfo", info);
+    };
 </script>
 
 <style lang="less" scoped>

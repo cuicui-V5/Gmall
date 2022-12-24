@@ -11,24 +11,43 @@
                         </li>
                     </ul>
                     <ul class="fl sui-tag">
-                        <li class="with-x">手机</li>
-                        <li class="with-x">
-                            iphone
-                            <i>×</i>
+                        <!-- 面包屑 -->
+                        <li
+                            class="with-x"
+                            v-if="searchParams.categoryName"
+                        >
+                            {{ searchParams.categoryName }}
+                            <i @click="clearCategoryName">×</i>
                         </li>
-                        <li class="with-x">
-                            华为
-                            <i>×</i>
+                        <li
+                            class="with-x"
+                            v-if="searchParams.keyword"
+                        >
+                            {{ searchParams.keyword }}
+                            <i @click="clearKeyWord">×</i>
                         </li>
-                        <li class="with-x">
-                            OPPO
-                            <i>×</i>
+                        <li
+                            class="with-x"
+                            v-if="searchParams.trademark"
+                        >
+                            {{ searchParams.trademark.split(":")[1] }}
+                            <i @click="clearTrademark">×</i>
+                        </li>
+                        <li
+                            class="with-x"
+                            v-for="(prop, index) in searchParams.props"
+                        >
+                            {{ prop.split(":")[1] }}
+                            <i @click="clearProps(index)">×</i>
                         </li>
                     </ul>
                 </div>
 
                 <!--selector-->
-                <SearchSelector />
+                <SearchSelector
+                    @trademarkInfo="trademarkInfo"
+                    @attrInfo="attrInfo"
+                />
 
                 <!--details-->
                 <div class="details clearfix">
@@ -153,22 +172,90 @@
 
     import { useSearchStore } from "@/stores/search";
     import { useRoute } from "vue-router";
+    import { ref, watch } from "vue";
+    import router from "@/router";
+    import eventBus from "@/lib/eventBus";
+
     const store = useSearchStore();
     const route = useRoute();
 
-    const searchParams = {
+    // 发送请求携带的参数
+    const searchParams = ref({
+        category1Id: "",
+        category2Id: "",
         category3Id: "",
         categoryName: "",
         keyword: "",
         order: "",
         pageNo: 1,
         pageSize: 10,
-        props: [],
+        props: [] as string[],
         trademark: "",
-    };
-    Object.assign(searchParams, route.query, route.params);
+    });
+    // 将query和params合并到参数内
+    Object.assign(searchParams.value, route.query, route.params);
+    store.getSearchList(searchParams.value);
 
-    store.getSearchList(searchParams);
+    // 如果路由变化, 重新发送请求
+    watch(route, () => {
+        // console.log(route.query);
+
+        Object.assign(searchParams.value, route.query, route.params);
+        store.getSearchList(searchParams.value);
+
+        // console.log(searchParams);
+        // 搜完之后, 重置参数
+        Object.assign(searchParams, {
+            category1Id: "",
+            category2Id: "",
+            category3Id: "",
+        });
+    });
+    // 清除分类面包屑
+    const clearCategoryName = () => {
+        searchParams.value.categoryName = "";
+
+        router.push({
+            name: "search",
+            params: route.params,
+        });
+    };
+    // 清楚关键字面包屑
+    const clearKeyWord = () => {
+        searchParams.value.keyword = "";
+        // 通知header组件删除关键字
+        eventBus.emit("clearKeyword");
+
+        router.push({
+            name: "search",
+            query: route.query,
+        });
+    };
+    // 点击商品品牌重新发请求
+    const trademarkInfo = (trademark: { tmId: number; tmName: string }) => {
+        console.log("收到子组件的td", trademark);
+        searchParams.value.trademark = `${trademark.tmId}:${trademark.tmName}`;
+        store.getSearchList(searchParams.value);
+    };
+    const clearTrademark = () => {
+        searchParams.value.trademark = "";
+        store.getSearchList(searchParams.value);
+    };
+    // 点击商品属性发送请求
+    const attrInfo = (attr: string) => {
+        // 如果已经有这个属性的面包屑了那么就不添加了, 并且不发请求了
+        if (!searchParams.value.props.includes(attr)) {
+            searchParams.value.props.push(attr);
+            store.getSearchList(searchParams.value);
+        }
+    };
+    const clearProps = (index: number) => {
+        console.log(index);
+        // 删除数组index的项
+        // splice的用法, 开始的下标, 删除的元素的数量, 要添加的元素
+        searchParams.value.props.splice(index, 1);
+        store.getSearchList(searchParams.value);
+    };
 </script>
 
 <style lang="less" scoped>

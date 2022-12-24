@@ -110,7 +110,7 @@
     const route = useRoute();
     // 是否显示三级导航
     const isShow = ref(true);
-    console.log(route.path);
+    // console.log(route.path);
 
     if (route.path !== "/") {
         isShow.value = false;
@@ -136,7 +136,7 @@
         // 事件委派, 只有点击a标签才生效
         // console.log(e);
         const element = e.target as HTMLElement;
-        console.log(element.dataset);
+        // console.log(element.dataset);
 
         if (element.tagName === "A") {
             let location = {
@@ -146,18 +146,18 @@
             };
             let query: {
                 categoryName: any;
-                category1id?: any;
-                category2id?: any;
-                category3id?: any;
+                category1Id?: any;
+                category2Id?: any;
+                category3Id?: any;
             } = {
                 categoryName: element.dataset.categoryname,
             };
             if (element.dataset.category1id) {
-                query.category1id = element.dataset.category1id;
+                query.category1Id = element.dataset.category1id;
             } else if (element.dataset.category2id) {
-                query.category2id = element.dataset.category2id;
+                query.category2Id = element.dataset.category2id;
             } else if (element.dataset.category3id) {
-                query.category3id = element.dataset.category3id;
+                query.category3Id = element.dataset.category3id;
             }
             location.query = query;
             if (route.params) {

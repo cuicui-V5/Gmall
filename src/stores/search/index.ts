@@ -6,7 +6,7 @@ export const useSearchStore = defineStore("search", () => {
     const searchList = ref<searchListType>();
     const getSearchList = async (params: getSearchListParamsType) => {
         const res = (await reqSearchList(params)).data;
-        console.log(res);
+        // console.log(res);
 
         if ((res.code = 200)) {
             searchList.value = res.data;
