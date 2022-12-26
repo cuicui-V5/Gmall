@@ -94,7 +94,11 @@
         </div>
     </div>
 </template>
-
+<script lang="ts">
+    export default {
+        name: "type-nav",
+    };
+</script>
 <script setup lang="ts">
     import router from "@/router";
     import { useRoute } from "vue-router";

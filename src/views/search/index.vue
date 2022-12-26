@@ -54,23 +54,41 @@
                     <div class="sui-navbar">
                         <div class="navbar-inner filter">
                             <ul class="sui-nav">
-                                <li class="active">
-                                    <a href="#">综合</a>
+                                <li
+                                    :class="{
+                                        active: isOne,
+                                    }"
+                                    @click="changeOrder(1)"
+                                >
+                                    <a>
+                                        综合
+                                        <span
+                                            v-if="isOne"
+                                            class="iconfont"
+                                            :class="{
+                                                'icon-direction-down': isDesc,
+                                                'icon-direction-up': isAsc,
+                                            }"
+                                        ></span>
+                                    </a>
                                 </li>
-                                <li>
-                                    <a href="#">销量</a>
-                                </li>
-                                <li>
-                                    <a href="#">新品</a>
-                                </li>
-                                <li>
-                                    <a href="#">评价</a>
-                                </li>
-                                <li>
-                                    <a href="#">价格⬆</a>
-                                </li>
-                                <li>
-                                    <a href="#">价格⬇</a>
+                                <li
+                                    :class="{
+                                        active: isTwo,
+                                    }"
+                                    @click="changeOrder(2)"
+                                >
+                                    <a>
+                                        价格
+                                        <span
+                                            v-if="isTwo"
+                                            class="iconfont"
+                                            :class="{
+                                                'icon-direction-down': isDesc,
+                                                'icon-direction-up': isAsc,
+                                            }"
+                                        ></span>
+                                    </a>
                                 </li>
                             </ul>
                         </div>
@@ -132,47 +150,23 @@
                             </li>
                         </ul>
                     </div>
-                    <div class="fr page">
-                        <div class="sui-pagination clearfix">
-                            <ul>
-                                <li class="prev disabled">
-                                    <a href="#">«上一页</a>
-                                </li>
-                                <li class="active">
-                                    <a href="#">1</a>
-                                </li>
-                                <li>
-                                    <a href="#">2</a>
-                                </li>
-                                <li>
-                                    <a href="#">3</a>
-                                </li>
-                                <li>
-                                    <a href="#">4</a>
-                                </li>
-                                <li>
-                                    <a href="#">5</a>
-                                </li>
-                                <li class="dotted"><span>...</span></li>
-                                <li class="next">
-                                    <a href="#">下一页»</a>
-                                </li>
-                            </ul>
-                            <div><span>共10页&nbsp;</span></div>
-                        </div>
-                    </div>
+                    <pagination></pagination>
                 </div>
             </div>
         </div>
     </div>
 </template>
-
+<script lang="ts">
+    export default {
+        name: "search",
+    };
+</script>
 <script lang="ts" setup>
     import SearchSelector from "./SearchSelector/SearchSelector.vue";
 
     import { useSearchStore } from "@/stores/search";
     import { useRoute } from "vue-router";
-    import { ref, watch } from "vue";
+    import { ref, watch, computed } from "vue";
     import router from "@/router";
     import eventBus from "@/lib/eventBus";
 
@@ -186,7 +180,7 @@
         category3Id: "",
         categoryName: "",
         keyword: "",
-        order: "",
+        order: "1:desc",
         pageNo: 1,
         pageSize: 10,
         props: [] as string[],
@@ -195,6 +189,18 @@
     // 将query和params合并到参数内
     Object.assign(searchParams.value, route.query, route.params);
     store.getSearchList(searchParams.value);
+    const isOne = computed(() => {
+        return searchParams.value.order.indexOf("1") != -1;
+    });
+    const isTwo = computed(() => {
+        return searchParams.value.order.indexOf("2") != -1;
+    });
+    const isAsc = computed(() => {
+        return searchParams.value.order.indexOf("asc") != -1;
+    });
+    const isDesc = computed(() => {
+        return searchParams.value.order.indexOf("desc") != -1;
+    });
 
     // 如果路由变化, 重新发送请求
     watch(route, () => {
@@ -254,6 +260,27 @@
         // 删除数组index的项
         // splice的用法, 开始的下标, 删除的元素的数量, 要添加的元素
         searchParams.value.props.splice(index, 1);
+        store.getSearchList(searchParams.value);
+    };
+    const changeOrder = (type: number) => {
+        // type为当前点击的排序类型
+        console.log(type);
+        // 获取当前的状态
+        let originType = searchParams.value.order.split(":")[0];
+        let originSort = searchParams.value.order.split(":")[1];
+
+        // 如果点击的和当前状态的一样, 那么就切换asc或desc
+        if (type.toString() === originType) {
+            // console.log("same");
+            searchParams.value.order = `${type}:${
+                originSort == "asc" ? "desc" : "asc"
+            }`;
+            // console.log(searchParams);
+        } else {
+            // 反之则切换排序类型
+            searchParams.value.order = `${type}:${originSort}`;
+        }
+        // 重新请求数据
         store.getSearchList(searchParams.value);
     };
 </script>
