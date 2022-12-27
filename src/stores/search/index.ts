@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
+import type { Ref } from "vue";
 import { reqSearchList } from "@/api/index";
 import type { getSearchListParamsType, searchListType } from "@/interface";
 export const useSearchStore = defineStore("search", () => {

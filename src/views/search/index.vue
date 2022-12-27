@@ -150,7 +150,14 @@
                             </li>
                         </ul>
                     </div>
-                    <pagination></pagination>
+                    <pagination
+                        v-if="store.searchList"
+                        :pageNo="searchParams.pageNo"
+                        :pageSize="searchParams.pageSize"
+                        :total="store.searchList.total"
+                        :continues="5"
+                        @changePage="changePage"
+                    ></pagination>
                 </div>
             </div>
         </div>
@@ -181,8 +188,8 @@
         categoryName: "",
         keyword: "",
         order: "1:desc",
-        pageNo: 1,
-        pageSize: 10,
+        pageNo: 7,
+        pageSize: 4,
         props: [] as string[],
         trademark: "",
     });
@@ -281,6 +288,12 @@
             searchParams.value.order = `${type}:${originSort}`;
         }
         // 重新请求数据
+        store.getSearchList(searchParams.value);
+    };
+    const changePage = (pageNo: number) => {
+        console.log(pageNo);
+
+        searchParams.value.pageNo = pageNo;
         store.getSearchList(searchParams.value);
     };
 </script>
