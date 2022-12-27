@@ -83,11 +83,13 @@
     import "swiper/css/pagination";
     import "swiper/css/scrollbar";
     import type { floorListType } from "@/interface/index";
+    import { toRef, toRefs } from "vue";
     const modules = [Navigation, Pagination, Scrollbar, A11y];
 
-    const { floor } = defineProps<{
+    const props = defineProps<{
         floor: floorListType;
     }>();
+    const { floor } = toRefs(props);
 </script>
 
 <style scoped lang="less">

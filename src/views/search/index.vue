@@ -188,7 +188,7 @@
         categoryName: "",
         keyword: "",
         order: "1:desc",
-        pageNo: 7,
+        pageNo: 1,
         pageSize: 4,
         props: [] as string[],
         trademark: "",
