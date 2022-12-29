@@ -69,3 +69,66 @@ export interface getSearchListParamsType {
     props?: string[];
     trademark?: string;
 }
+
+export interface GoodsInfoType {
+    valuesSkuJson: string;
+    price: number;
+    categoryView: CategoryView;
+    spuSaleAttrList: any[];
+    skuInfo: SkuInfo;
+}
+
+interface CategoryView {
+    id: number;
+    category1Id: number;
+    category1Name: string;
+    category2Id: number;
+    category2Name: string;
+    category3Id: number;
+    category3Name: string;
+}
+
+interface SkuInfo {
+    id: number;
+    spuId: number;
+    price: number;
+    skuName: string;
+    skuDesc: string;
+    weight: string;
+    tmId: number;
+    category3Id: number;
+    skuDefaultImg: string;
+    isSale: number;
+    createTime: string;
+    skuImageList: SkuImageList[];
+    skuAttrValueList: SkuAttrValueList[];
+    skuSaleAttrValueList: SkuSaleAttrValueList[];
+}
+
+interface SkuImageList {
+    id: number;
+    skuId: number;
+    imgName: string;
+    imgUrl: string;
+    spuImgId: number;
+    isDefault: string;
+}
+
+interface SkuAttrValueList {
+    id: number;
+    attrId: number;
+    valueId: number;
+    skuId: number;
+    attrName: string;
+    valueName: string;
+}
+
+interface SkuSaleAttrValueList {
+    id: number;
+    skuId: number;
+    spuId: number;
+    saleAttrValueId: number;
+    saleAttrId: number;
+    saleAttrName: string;
+    saleAttrValueName: string;
+}

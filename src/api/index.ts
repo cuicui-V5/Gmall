@@ -17,3 +17,5 @@ export const reqFloor = () => mockRequests.get("/floor");
 // 搜索接口
 export const reqSearchList = (params: getSearchListParamsType) =>
     requests.post("/list", params, {});
+
+export const reqGoodsInfo = (skuId: number) => requests.get(`/item/${skuId}`);

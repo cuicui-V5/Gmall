@@ -102,12 +102,9 @@
                             >
                                 <div class="list-wrap">
                                     <div class="p-img">
-                                        <a
-                                            href="item.html"
-                                            target="_blank"
-                                        >
+                                        <RouterLink :to="`/detail/${good.id}`">
                                             <img :src="good.defaultImg" />
-                                        </a>
+                                        </RouterLink>
                                     </div>
                                     <div class="price">
                                         <strong>

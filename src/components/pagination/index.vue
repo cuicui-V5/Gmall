@@ -6,7 +6,15 @@
         >
             上一页
         </button>
-        <button v-if="startAndEnd.start > 1">1</button>
+        <button
+            v-if="startAndEnd.start > 1"
+            :class="{
+                active: pageNo == 1,
+            }"
+            @click="emit('changePage', 1)"
+        >
+            1
+        </button>
         <button v-if="startAndEnd.start > 2">···</button>
 
         <button
@@ -21,7 +29,13 @@
         </button>
 
         <button v-if="startAndEnd.end < totalPage - 1">···</button>
-        <button v-if="startAndEnd.end < totalPage">{{ totalPage }}</button>
+        <button
+            v-if="startAndEnd.end < totalPage"
+            :class="{ active: pageNo == totalPage }"
+            @click="emit('changePage', totalPage)"
+        >
+            {{ totalPage }}
+        </button>
         <button
             :disabled="pageNo == totalPage"
             @click="emit('changePage', pageNo + 1)"
