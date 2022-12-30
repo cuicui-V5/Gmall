@@ -1,0 +1,52 @@
+# Details
+
+Date : 2022-12-30 15:19:30
+
+Directory c:\\学习\\前端\\Gmall\\src
+
+Total : 37 files,  5119 codes, 88 comments, 460 blanks, all 5667 lines
+
+[Summary](results.md) / Details / [Diff Summary](diff.md) / [Diff Details](diff-details.md)
+
+## Files
+| filename | language | code | comment | blank | total |
+| :--- | :--- | ---: | ---: | ---: | ---: |
+| [src/App.vue](/src/App.vue) | vue | 17 | 0 | 4 | 21 |
+| [src/api/index.ts](/src/api/index.ts) | TypeScript | 10 | 5 | 7 | 22 |
+| [src/api/mockRequest.ts](/src/api/mockRequest.ts) | TypeScript | 28 | 11 | 7 | 46 |
+| [src/api/request.ts](/src/api/request.ts) | TypeScript | 28 | 11 | 7 | 46 |
+| [src/assets/base.css](/src/assets/base.css) | CSS | 59 | 2 | 14 | 75 |
+| [src/assets/iconfont.css](/src/assets/iconfont.css) | CSS | 1,062 | 0 | 0 | 1,062 |
+| [src/assets/logo.svg](/src/assets/logo.svg) | XML | 1 | 0 | 0 | 1 |
+| [src/assets/reset.css](/src/assets/reset.css) | CSS | 54 | 10 | 13 | 77 |
+| [src/assets/swiper.min.css](/src/assets/swiper.min.css) | CSS | 1 | 11 | 1 | 13 |
+| [src/components/footer/index.vue](/src/components/footer/index.vue) | vue | 158 | 1 | 14 | 173 |
+| [src/components/header/index.vue](/src/components/header/index.vue) | vue | 164 | 3 | 21 | 188 |
+| [src/components/pagination/index.vue](/src/components/pagination/index.vue) | vue | 127 | 8 | 13 | 148 |
+| [src/components/type-nav/index.vue](/src/components/type-nav/index.vue) | vue | 292 | 1 | 23 | 316 |
+| [src/interface/index.ts](/src/interface/index.ts) | TypeScript | 122 | 0 | 13 | 135 |
+| [src/lib/eventBus.ts](/src/lib/eventBus.ts) | TypeScript | 2 | 0 | 1 | 3 |
+| [src/main.ts](/src/main.ts) | TypeScript | 15 | 2 | 4 | 21 |
+| [src/mock/banner.json](/src/mock/banner.json) | JSON | 18 | 0 | 1 | 19 |
+| [src/mock/floor.json](/src/mock/floor.json) | JSON | 130 | 0 | 1 | 131 |
+| [src/mock/mockServe.ts](/src/mock/mockServe.ts) | TypeScript | 11 | 0 | 2 | 13 |
+| [src/router/index.ts](/src/router/index.ts) | TypeScript | 57 | 0 | 4 | 61 |
+| [src/stores/detail/index.ts](/src/stores/detail/index.ts) | TypeScript | 18 | 0 | 1 | 19 |
+| [src/stores/home/index.ts](/src/stores/home/index.ts) | TypeScript | 37 | 2 | 2 | 41 |
+| [src/stores/search/index.ts](/src/stores/search/index.ts) | TypeScript | 18 | 1 | 2 | 21 |
+| [src/views/Detail/ImageList/ImageList.vue](/src/views/Detail/ImageList/ImageList.vue) | vue | 68 | 0 | 10 | 78 |
+| [src/views/Detail/Zoom/Zoom.vue](/src/views/Detail/Zoom/Zoom.vue) | vue | 69 | 0 | 9 | 78 |
+| [src/views/Detail/index.vue](/src/views/Detail/index.vue) | vue | 838 | 9 | 89 | 936 |
+| [src/views/HomeView/brand/index.vue](/src/views/HomeView/brand/index.vue) | vue | 68 | 1 | 8 | 77 |
+| [src/views/HomeView/floor/index.vue](/src/views/HomeView/floor/index.vue) | vue | 206 | 1 | 26 | 233 |
+| [src/views/HomeView/index.vue](/src/views/HomeView/index.vue) | vue | 24 | 0 | 3 | 27 |
+| [src/views/HomeView/like/index.vue](/src/views/HomeView/like/index.vue) | vue | 154 | 1 | 14 | 169 |
+| [src/views/HomeView/list-container/index.vue](/src/views/HomeView/list-container/index.vue) | vue | 267 | 2 | 31 | 300 |
+| [src/views/HomeView/rank/index.vue](/src/views/HomeView/rank/index.vue) | vue | 200 | 1 | 20 | 221 |
+| [src/views/HomeView/today-recommend/index.vue](/src/views/HomeView/today-recommend/index.vue) | vue | 68 | 1 | 10 | 79 |
+| [src/views/login.vue](/src/views/login.vue) | vue | 7 | 0 | 3 | 10 |
+| [src/views/register.vue](/src/views/register.vue) | vue | 7 | 0 | 3 | 10 |
+| [src/views/search/SearchSelector/SearchSelector.vue](/src/views/search/SearchSelector/SearchSelector.vue) | vue | 148 | 0 | 18 | 166 |
+| [src/views/search/index.vue](/src/views/search/index.vue) | vue | 566 | 4 | 61 | 631 |
+
+[Summary](results.md) / Details / [Diff Summary](diff.md) / [Diff Details](diff-details.md)

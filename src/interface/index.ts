@@ -74,11 +74,11 @@ export interface GoodsInfoType {
     valuesSkuJson: string;
     price: number;
     categoryView: CategoryView;
-    spuSaleAttrList: any[];
+    spuSaleAttrList: SpuSaleAttrList[];
     skuInfo: SkuInfo;
 }
 
-interface CategoryView {
+export interface CategoryView {
     id: number;
     category1Id: number;
     category1Name: string;
@@ -88,7 +88,24 @@ interface CategoryView {
     category3Name: string;
 }
 
-interface SkuInfo {
+export interface SpuSaleAttrList {
+    id: number;
+    spuId: number;
+    baseSaleAttrId: number;
+    saleAttrName: string;
+    spuSaleAttrValueList: SpuSaleAttrValueList[];
+}
+
+export interface SpuSaleAttrValueList {
+    id: number;
+    spuId: number;
+    baseSaleAttrId: number;
+    saleAttrValueName: string;
+    saleAttrName: string;
+    isChecked: string;
+}
+
+export interface SkuInfo {
     id: number;
     spuId: number;
     price: number;
@@ -105,7 +122,7 @@ interface SkuInfo {
     skuSaleAttrValueList: SkuSaleAttrValueList[];
 }
 
-interface SkuImageList {
+export interface SkuImageList {
     id: number;
     skuId: number;
     imgName: string;
@@ -114,7 +131,7 @@ interface SkuImageList {
     isDefault: string;
 }
 
-interface SkuAttrValueList {
+export interface SkuAttrValueList {
     id: number;
     attrId: number;
     valueId: number;
@@ -123,7 +140,7 @@ interface SkuAttrValueList {
     valueName: string;
 }
 
-interface SkuSaleAttrValueList {
+export interface SkuSaleAttrValueList {
     id: number;
     skuId: number;
     spuId: number;

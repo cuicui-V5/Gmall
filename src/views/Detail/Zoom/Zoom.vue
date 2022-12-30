@@ -1,9 +1,9 @@
 <template>
     <div class="spec-preview">
-        <img src="../images/s1.png" />
+        <img :src="skuImageList[showImgIndex].imgUrl" />
         <div class="event"></div>
         <div class="big">
-            <img src="../images/s1.png" />
+            <img :src="skuImageList[showImgIndex].imgUrl" />
         </div>
         <div class="mask"></div>
     </div>
@@ -14,7 +14,18 @@
         name: "Zoom",
     };
 </script>
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+    import type { SkuImageList } from "@/interface/index";
+    import eventBus from "@/lib/eventBus";
+    import { ref } from "vue";
+    defineProps<{
+        skuImageList: SkuImageList[];
+    }>();
+    const showImgIndex = ref(0);
+    eventBus.on("changeIndex", (index) => {
+        showImgIndex.value = index as number;
+    });
+</script>
 
 <style lang="less">
     .spec-preview {

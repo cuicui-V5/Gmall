@@ -1,0 +1,15 @@
+"filename", "language", "TypeScript", "vue", "comment", "blank", "total"
+"c:\学习\前端\Gmall\src\api\index.ts", "TypeScript", 1, 0, 0, 1, 2
+"c:\学习\前端\Gmall\src\components\pagination\index.vue", "vue", 0, 127, 8, 13, 148
+"c:\学习\前端\Gmall\src\components\type-nav\index.vue", "vue", 0, 5, 0, -1, 4
+"c:\学习\前端\Gmall\src\interface\index.ts", "TypeScript", 57, 0, 0, 6, 63
+"c:\学习\前端\Gmall\src\main.ts", "TypeScript", 2, 0, 0, 0, 2
+"c:\学习\前端\Gmall\src\router\index.ts", "TypeScript", 14, 0, 0, 1, 15
+"c:\学习\前端\Gmall\src\stores\detail\index.ts", "TypeScript", 18, 0, 0, 1, 19
+"c:\学习\前端\Gmall\src\stores\search\index.ts", "TypeScript", 1, 0, 0, 0, 1
+"c:\学习\前端\Gmall\src\views\Detail\ImageList\ImageList.vue", "vue", 0, 68, 0, 10, 78
+"c:\学习\前端\Gmall\src\views\Detail\Zoom\Zoom.vue", "vue", 0, 69, 0, 9, 78
+"c:\学习\前端\Gmall\src\views\Detail\index.vue", "vue", 0, 838, 9, 89, 936
+"c:\学习\前端\Gmall\src\views\HomeView\floor\index.vue", "vue", 0, 2, 0, 0, 2
+"c:\学习\前端\Gmall\src\views\search\index.vue", "vue", 0, 36, 0, 1, 37
+"Total", "-", 93, 1145, 17, 130, 1385

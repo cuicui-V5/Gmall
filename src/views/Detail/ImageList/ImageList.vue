@@ -1,22 +1,52 @@
 <template>
     <div class="swiper-container">
-        <div class="swiper-wrapper">
-            <div class="swiper-slide">
-                <img src="../images/s1.png" />
-            </div>
-        </div>
-        <div class="swiper-button-next"></div>
-        <div class="swiper-button-prev"></div>
+        <swiper
+            :modules="modules"
+            :slides-per-view="6"
+            :slides-per-group="2"
+            :space-between="50"
+            navigation
+        >
+            <swiper-slide v-for="(item, index) in skuImageList">
+                <img
+                    :src="item.imgUrl"
+                    @click="changeIndex(index)"
+                    :class="{
+                        active: currentIndex == index,
+                    }"
+                />
+            </swiper-slide>
+        </swiper>
     </div>
 </template>
 
 <script lang="ts">
-    import Swiper from "swiper";
     export default {
         name: "ImageList",
     };
 </script>
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+    import { Swiper, SwiperSlide } from "swiper/vue";
+    // import Swiper core and required modules
+    import { Navigation, Pagination, Scrollbar, A11y } from "swiper";
+    // Import Swiper styles
+    import "swiper/css";
+    import "swiper/css/navigation";
+    import "swiper/css/pagination";
+    import "swiper/css/scrollbar";
+    import type { SkuImageList } from "@/interface/index";
+    import { ref } from "vue";
+    import eventBus from "@/lib/eventBus";
+    const modules = [Navigation, Pagination, Scrollbar, A11y];
+    const currentIndex = ref(0);
+    const changeIndex = (index: number) => {
+        currentIndex.value = index;
+        eventBus.emit("changeIndex", currentIndex.value);
+    };
+    defineProps<{
+        skuImageList: SkuImageList[];
+    }>();
+</script>
 
 <style lang="less" scoped>
     .swiper-container {

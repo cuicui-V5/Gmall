@@ -1,0 +1,54 @@
+Date : 2022-12-30 15:19:30
+Directory : c:\学习\前端\Gmall\src
+Total : 13 files,  1238 codes, 17 comments, 130 blanks, all 1385 lines
+
+Languages
++------------+------------+------------+------------+------------+------------+
+| language   | files      | code       | comment    | blank      | total      |
++------------+------------+------------+------------+------------+------------+
+| vue        |          7 |      1,145 |         17 |        121 |      1,283 |
+| TypeScript |          6 |         93 |          0 |          9 |        102 |
++------------+------------+------------+------------+------------+------------+
+
+Directories
++---------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                    | files      | code       | comment    | blank      | total      |
++---------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                       |         13 |      1,238 |         17 |        130 |      1,385 |
+| api                                                     |          1 |          1 |          0 |          1 |          2 |
+| components                                              |          2 |        132 |          8 |         12 |        152 |
+| components\pagination                                   |          1 |        127 |          8 |         13 |        148 |
+| components\type-nav                                     |          1 |          5 |          0 |         -1 |          4 |
+| interface                                               |          1 |         57 |          0 |          6 |         63 |
+| router                                                  |          1 |         14 |          0 |          1 |         15 |
+| stores                                                  |          2 |         19 |          0 |          1 |         20 |
+| stores\detail                                           |          1 |         18 |          0 |          1 |         19 |
+| stores\search                                           |          1 |          1 |          0 |          0 |          1 |
+| views                                                   |          5 |      1,013 |          9 |        109 |      1,131 |
+| views\Detail                                            |          3 |        975 |          9 |        108 |      1,092 |
+| views\Detail\ImageList                                  |          1 |         68 |          0 |         10 |         78 |
+| views\Detail\Zoom                                       |          1 |         69 |          0 |          9 |         78 |
+| views\HomeView                                          |          1 |          2 |          0 |          0 |          2 |
+| views\HomeView\floor                                    |          1 |          2 |          0 |          0 |          2 |
+| views\search                                            |          1 |         36 |          0 |          1 |         37 |
++---------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++---------------------------------------------------------+------------+------------+------------+------------+------------+
+| filename                                                | language   | code       | comment    | blank      | total      |
++---------------------------------------------------------+------------+------------+------------+------------+------------+
+| c:\学习\前端\Gmall\src\api\index.ts                         | TypeScript |          1 |          0 |          1 |          2 |
+| c:\学习\前端\Gmall\src\components\pagination\index.vue      | vue        |        127 |          8 |         13 |        148 |
+| c:\学习\前端\Gmall\src\components\type-nav\index.vue        | vue        |          5 |          0 |         -1 |          4 |
+| c:\学习\前端\Gmall\src\interface\index.ts                   | TypeScript |         57 |          0 |          6 |         63 |
+| c:\学习\前端\Gmall\src\main.ts                              | TypeScript |          2 |          0 |          0 |          2 |
+| c:\学习\前端\Gmall\src\router\index.ts                      | TypeScript |         14 |          0 |          1 |         15 |
+| c:\学习\前端\Gmall\src\stores\detail\index.ts               | TypeScript |         18 |          0 |          1 |         19 |
+| c:\学习\前端\Gmall\src\stores\search\index.ts               | TypeScript |          1 |          0 |          0 |          1 |
+| c:\学习\前端\Gmall\src\views\Detail\ImageList\ImageList.vue | vue        |         68 |          0 |         10 |         78 |
+| c:\学习\前端\Gmall\src\views\Detail\Zoom\Zoom.vue           | vue        |         69 |          0 |          9 |         78 |
+| c:\学习\前端\Gmall\src\views\Detail\index.vue               | vue        |        838 |          9 |         89 |        936 |
+| c:\学习\前端\Gmall\src\views\HomeView\floor\index.vue       | vue        |          2 |          0 |          0 |          2 |
+| c:\学习\前端\Gmall\src\views\search\index.vue               | vue        |         36 |          0 |          1 |         37 |
+| Total                                                   |            |      1,238 |         17 |        130 |      1,385 |
++---------------------------------------------------------+------------+------------+------------+------------+------------+
