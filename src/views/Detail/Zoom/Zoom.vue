@@ -1,11 +1,20 @@
 <template>
     <div class="spec-preview">
         <img :src="skuImageList[showImgIndex].imgUrl" />
-        <div class="event"></div>
+        <div
+            class="event"
+            @mousemove="move($event)"
+        ></div>
         <div class="big">
-            <img :src="skuImageList[showImgIndex].imgUrl" />
+            <img
+                ref="bigImg"
+                :src="skuImageList[showImgIndex].imgUrl"
+            />
         </div>
-        <div class="mask"></div>
+        <div
+            class="mask"
+            ref="mask"
+        ></div>
     </div>
 </template>
 
@@ -18,13 +27,47 @@
     import type { SkuImageList } from "@/interface/index";
     import eventBus from "@/lib/eventBus";
     import { ref } from "vue";
+
     defineProps<{
         skuImageList: SkuImageList[];
     }>();
     const showImgIndex = ref(0);
+    const mask = ref<HTMLDivElement>();
+    const bigImg = ref<HTMLImageElement>();
     eventBus.on("changeIndex", (index) => {
         showImgIndex.value = index as number;
     });
+    const move = (e: MouseEvent) => {
+        // 获取鼠标在元素内的位置应该用offset
+        // 计算mask的位置
+        if (mask.value && bigImg.value) {
+            const target = e.target as HTMLDivElement;
+            const maskWidth = mask.value.offsetWidth;
+            const maskHeight = mask.value.offsetHeight;
+            let maskX = e.offsetX - maskWidth / 2;
+            let maskY = e.offsetY - maskHeight / 2;
+
+            // 越界处理
+            if (maskX < 0) {
+                maskX = 0;
+            }
+            if (maskX > target.offsetWidth - maskWidth) {
+                maskX = target.offsetWidth - maskWidth;
+            }
+            if (maskY < 0) {
+                maskY = 0;
+            }
+            if (maskY > target.offsetHeight - maskHeight) {
+                maskY = target.offsetHeight - maskHeight;
+            }
+            // 设置遮罩位置
+            mask.value.style.left = maskX + "px";
+            mask.value.style.top = maskY + "px";
+            // 设置big位置
+            bigImg.value.style.left = -maskX * 2 + "px";
+            bigImg.value.style.top = -maskY * 2 + "px";
+        }
+    };
 </script>
 
 <style lang="less">

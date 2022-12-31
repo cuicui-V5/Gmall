@@ -18,4 +18,15 @@ export const reqFloor = () => mockRequests.get("/floor");
 export const reqSearchList = (params: getSearchListParamsType) =>
     requests.post("/list", params, {});
 
+// 获取商品详情
 export const reqGoodsInfo = (skuId: number) => requests.get(`/item/${skuId}`);
+
+// 添加购物车
+export const reqAddCart = async (skuId: number, skuNum: number) => {
+    const res = await requests.post(`cart/addToCart/${skuId}/${skuNum}`);
+    if (res.data.code == 200) {
+        return "ok";
+    } else {
+        return Promise.reject(new Error("添加失败"));
+    }
+};

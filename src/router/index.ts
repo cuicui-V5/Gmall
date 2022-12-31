@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView/index.vue";
 import searchView from "../views/search/index.vue";
 import detailView from "../views/Detail/index.vue";
+import addCartView from "../views/addCart/index.vue";
 
 import registerView from "../views/register.vue";
 import loginView from "../views/login.vue";
@@ -29,6 +30,14 @@ const router = createRouter({
             path: "/detail/:skuId",
             name: "detail",
             component: detailView,
+            meta: {
+                showFooter: true,
+            },
+        },
+        {
+            path: "/addCart",
+            name: "addCart",
+            component: addCartView,
             meta: {
                 showFooter: true,
             },

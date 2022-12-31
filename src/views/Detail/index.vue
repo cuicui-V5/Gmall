@@ -115,24 +115,14 @@
                         <div class="cartWrap">
                             <div class="controls">
                                 <input
+                                    type="number"
                                     autocomplete="off"
                                     class="itxt"
+                                    v-model="skuNum"
                                 />
-                                <a
-                                    href="javascript:"
-                                    class="plus"
-                                >
-                                    +
-                                </a>
-                                <a
-                                    href="javascript:"
-                                    class="mins"
-                                >
-                                    -
-                                </a>
                             </div>
                             <div class="add">
-                                <a href="javascript:">加入购物车</a>
+                                <a @click="addCart">加入购物车</a>
                             </div>
                         </div>
                     </div>
@@ -423,17 +413,21 @@
     import Zoom from "./Zoom/Zoom.vue";
     import { useDetailStore } from "@/stores/detail/index";
     import { storeToRefs } from "pinia";
-    import { toRefs } from "vue";
+    import { ref, watch } from "vue";
     import { useRoute } from "vue-router";
     import type {
         SpuSaleAttrValueList,
         SpuSaleAttrList,
     } from "@/interface/index";
+    import { reqAddCart } from "@/api/index";
+    import router from "@/router/index";
     const store = useDetailStore();
     const route = useRoute();
-    const skuId = route.params.skuId;
-    store.getGoodsInfo(Number(skuId));
+
+    const skuId = Number(route.params.skuId);
+    store.getGoodsInfo(skuId);
     const { goodsInfo } = storeToRefs(store);
+    const skuNum = ref(1);
 
     const changeActive = (
         item: SpuSaleAttrValueList,
@@ -444,6 +438,27 @@
             i.isChecked = "0";
         });
         item.isChecked = "1";
+    };
+    watch(skuNum, (newVal) => {
+        if (newVal < 1) {
+            newVal = 1;
+        }
+        skuNum.value = Math.round(newVal);
+    });
+    const addCart = async () => {
+        try {
+            const res = await reqAddCart(skuId, skuNum.value);
+            router.push({
+                name: "addCart",
+                query: {
+                    skuNum: skuNum.value,
+                },
+            });
+            // 将数据存入sessionStorage
+            sessionStorage.setItem("skuInfo", JSON.stringify(goodsInfo.value));
+        } catch (error) {
+            console.log(error);
+        }
     };
 </script>
 
