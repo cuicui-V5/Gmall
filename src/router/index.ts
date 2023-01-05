@@ -6,6 +6,7 @@ import addCartView from "../views/addCart/index.vue";
 
 import registerView from "../views/register.vue";
 import loginView from "../views/login.vue";
+import shopCartView from "../views/ShopCart/index.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -38,6 +39,14 @@ const router = createRouter({
             path: "/addCart",
             name: "addCart",
             component: addCartView,
+            meta: {
+                showFooter: true,
+            },
+        },
+        {
+            path: "/shopCart",
+            name: "shopCart",
+            component: shopCartView,
             meta: {
                 showFooter: true,
             },

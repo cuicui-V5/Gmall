@@ -455,7 +455,10 @@
                 },
             });
             // 将数据存入sessionStorage
-            sessionStorage.setItem("skuInfo", JSON.stringify(goodsInfo.value));
+            sessionStorage.setItem(
+                "skuInfo",
+                JSON.stringify(goodsInfo.value.skuInfo),
+            );
         } catch (error) {
             console.log(error);
         }

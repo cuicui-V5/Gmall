@@ -1,5 +1,6 @@
 import axios from "axios";
 import nprogress from "nprogress";
+import { useShopCartStore } from "./../stores/shopCart/index";
 
 const requests = axios.create({
     baseURL: "/api",
@@ -8,8 +9,13 @@ const requests = axios.create({
 // 添加请求拦截器
 requests.interceptors.request.use(
     function (config) {
+        const store = useShopCartStore();
+
         // 在发送请求之前做些什么
-        // console.log(config);
+        // 添加用户临时id的请求头
+        if (store.uuidToken && config.headers) {
+            config.headers.userTempId = store.uuidToken;
+        }
         // 开始进度条
         nprogress.start();
         return config;
