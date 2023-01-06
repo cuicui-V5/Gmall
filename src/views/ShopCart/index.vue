@@ -10,8 +10,14 @@
                 <div class="cart-th5">小计（元）</div>
                 <div class="cart-th6">操作</div>
             </div>
-            <div class="cart-body">
-                <ul class="cart-list">
+            <div
+                class="cart-body"
+                v-if="cartInfo"
+            >
+                <ul
+                    class="cart-list"
+                    v-for="item in cartInfo?.cartInfoList"
+                >
                     <li class="cart-list-con1">
                         <input
                             type="checkbox"
@@ -19,39 +25,62 @@
                         />
                     </li>
                     <li class="cart-list-con2">
-                        <img src="./images/goods1.png" />
+                        <img :src="item.imgUrl" />
                         <div class="item-msg">
-                            米家（MIJIA） 小米小白智能摄像机增强版
-                            1080p高清360度全景拍摄AI增强
+                            {{ item.skuName }}
                         </div>
                     </li>
 
                     <li class="cart-list-con4">
-                        <span class="price">399.00</span>
+                        <span class="price">{{ item.skuPrice }}.00</span>
                     </li>
                     <li class="cart-list-con5">
                         <a
-                            href="javascript:void(0)"
+                            @click="changeSkuNum(item.skuId, -1)"
                             class="mins"
                         >
                             -
                         </a>
                         <input
                             autocomplete="off"
-                            type="text"
-                            value="1"
+                            type="number"
+                            :value="item.skuNum"
                             minnum="1"
                             class="itxt"
+                            min="1"
+                            step="1"
+                            @change="
+                                changeSkuNum(
+                                    item.skuId,
+                                    Math.ceil(
+                                        Number(
+                                            ($event.target as HTMLInputElement)
+                                                .value,
+                                        ) - item.skuNum,
+                                    ) < 0
+                                        ? 0
+                                        : Math.ceil(
+                                              Number(
+                                                  (
+                                                      $event.target as HTMLInputElement
+                                                  ).value,
+                                              ) - item.skuNum,
+                                          ),
+                                )
+                            "
                         />
+                        <!-- 因为接口只接收变化了多少, 所以要计算出输入框的值与原本的值得差值 -->
                         <a
-                            href="javascript:void(0)"
+                            @click="changeSkuNum(item.skuId, 1)"
                             class="plus"
                         >
                             +
                         </a>
                     </li>
                     <li class="cart-list-con6">
-                        <span class="sum">399</span>
+                        <span class="sum">
+                            {{ item.skuNum * item.skuPrice }}
+                        </span>
                     </li>
                     <li class="cart-list-con7">
                         <a
@@ -71,8 +100,9 @@
                 <input
                     class="chooseAll"
                     type="checkbox"
+                    :checked="isAllChecked"
                 />
-                <span>全选</span>
+                <span>全选{{ isAllChecked }}</span>
             </div>
             <div class="option">
                 <a href="#none">删除选中的商品</a>
@@ -87,7 +117,7 @@
                 </div>
                 <div class="sumprice">
                     <em>总价（不含运费） ：</em>
-                    <i class="summoney">0</i>
+                    <i class="summoney">{{ totalPrice }}</i>
                 </div>
                 <div class="sumbtn">
                     <a
@@ -110,10 +140,33 @@
 </script>
 
 <script lang="ts" setup>
+    import { reqAddCart } from "@/api";
     import { useShopCartStore } from "@/stores/shopCart";
+    import { storeToRefs } from "pinia";
+    import { computed, ref } from "vue";
 
     const store = useShopCartStore();
+    const { shopCartData: cartInfo } = storeToRefs(store);
     store.getShopCart();
+    const isAllChecked = computed(() => {
+        return cartInfo.value?.cartInfoList.every(
+            (item) => item.isChecked == 0,
+        );
+    });
+    const totalPrice = computed(() => {
+        return cartInfo.value?.cartInfoList.reduce((pre, current) => {
+            return pre + current.skuNum * current.skuPrice;
+        }, 0);
+    });
+    const changeSkuNum = async (skuId: number, num: number) => {
+        console.log(skuId, num);
+        try {
+            await reqAddCart(skuId, num);
+        } catch (error) {
+            alert("修改失败");
+        }
+        store.getShopCart();
+    };
 </script>
 
 <style lang="less" scoped>
@@ -220,6 +273,10 @@
                             float: left;
                             text-align: center;
                             font-size: 14px;
+                            &::-webkit-outer-spin-button,
+                            &::-webkit-inner-spin-button {
+                                -webkit-appearance: none;
+                            }
                         }
 
                         .plus {

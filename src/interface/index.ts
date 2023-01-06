@@ -149,3 +149,27 @@ export interface SkuSaleAttrValueList {
     saleAttrName: string;
     saleAttrValueName: string;
 }
+export interface shopCartInfo {
+    cartInfoList: CartInfoList[];
+    activityRuleList: any;
+    createTime: string;
+}
+
+export interface CartInfoList {
+    id: number;
+    userId: string;
+    skuId: number;
+    cartPrice: number;
+    skuNum: number;
+    imgUrl: string;
+    skuName: string;
+    isChecked: number;
+    createTime: string;
+    operateTime: string;
+    isOrdered: number;
+    orderTime: any;
+    sourceType: string;
+    sourceId: number;
+    skuPrice: number;
+    couponInfoList: any;
+}
