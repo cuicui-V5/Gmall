@@ -22,6 +22,13 @@
                         <input
                             type="checkbox"
                             name="chk_list"
+                            :checked="item.isChecked == 1"
+                            @change="
+                                changeChecked(
+                                    item.skuId,
+                                    ($event.target as HTMLInputElement).checked,
+                                )
+                            "
                         />
                     </li>
                     <li class="cart-list-con2">
@@ -36,7 +43,14 @@
                     </li>
                     <li class="cart-list-con5">
                         <a
-                            @click="changeSkuNum(item.skuId, -1)"
+                            @click="
+                                changeSkuNum(
+                                    item.skuId,
+                                    `increase`,
+                                    undefined,
+                                    item.skuNum,
+                                )
+                            "
                             class="mins"
                         >
                             -
@@ -52,26 +66,14 @@
                             @change="
                                 changeSkuNum(
                                     item.skuId,
-                                    Math.ceil(
-                                        Number(
-                                            ($event.target as HTMLInputElement)
-                                                .value,
-                                        ) - item.skuNum,
-                                    ) < 0
-                                        ? 0
-                                        : Math.ceil(
-                                              Number(
-                                                  (
-                                                      $event.target as HTMLInputElement
-                                                  ).value,
-                                              ) - item.skuNum,
-                                          ),
+                                    `number`,
+                                    $event.target as HTMLInputElement,
+                                    item.skuNum,
                                 )
                             "
                         />
-                        <!-- 因为接口只接收变化了多少, 所以要计算出输入框的值与原本的值得差值 -->
                         <a
-                            @click="changeSkuNum(item.skuId, 1)"
+                            @click="changeSkuNum(item.skuId, `add`)"
                             class="plus"
                         >
                             +
@@ -84,8 +86,8 @@
                     </li>
                     <li class="cart-list-con7">
                         <a
-                            href="#none"
                             class="sindelet"
+                            @click="delCart(item.skuId)"
                         >
                             删除
                         </a>
@@ -101,11 +103,16 @@
                     class="chooseAll"
                     type="checkbox"
                     :checked="isAllChecked"
+                    @change="
+                        changeAllChecked(
+                            ($event.target as HTMLInputElement).checked,
+                        )
+                    "
                 />
                 <span>全选{{ isAllChecked }}</span>
             </div>
             <div class="option">
-                <a href="#none">删除选中的商品</a>
+                <a @click="deleteChecked">删除选中的商品</a>
                 <a href="#none">移到我的关注</a>
                 <a href="#none">清除下柜商品</a>
             </div>
@@ -117,7 +124,7 @@
                 </div>
                 <div class="sumprice">
                     <em>总价（不含运费） ：</em>
-                    <i class="summoney">{{ totalPrice }}</i>
+                    <i class="summoney">{{ totalPrice }}.00</i>
                 </div>
                 <div class="sumbtn">
                     <a
@@ -140,17 +147,19 @@
 </script>
 
 <script lang="ts" setup>
-    import { reqAddCart } from "@/api";
+    import { reqAddCart, reqDelShopCart, reqChangeChecked } from "@/api";
     import { useShopCartStore } from "@/stores/shopCart";
     import { storeToRefs } from "pinia";
     import { computed, ref } from "vue";
+    import { throttle } from "lodash";
+    import type { AxiosResponse } from "axios";
 
     const store = useShopCartStore();
     const { shopCartData: cartInfo } = storeToRefs(store);
     store.getShopCart();
     const isAllChecked = computed(() => {
         return cartInfo.value?.cartInfoList.every(
-            (item) => item.isChecked == 0,
+            (item) => item.isChecked == 1,
         );
     });
     const totalPrice = computed(() => {
@@ -158,12 +167,86 @@
             return pre + current.skuNum * current.skuPrice;
         }, 0);
     });
-    const changeSkuNum = async (skuId: number, num: number) => {
-        console.log(skuId, num);
+    const changeSkuNum = throttle(
+        async (
+            skuId: number, // 商品id
+            type: "add" | "increase" | "number", // 当前操作类型
+            target?: HTMLInputElement, // 如果是input框的输入需要用到
+            currentVal?: number, // 当前服务器端的值
+        ) => {
+            let num: number;
+            switch (type) {
+                case "add":
+                    num = 1;
+                    break;
+                case "increase":
+                    if (currentVal !== 1) {
+                        num = -1;
+                    } else num = 0;
+                    break;
+                case "number":
+                    if (target && currentVal) {
+                        // 检查input的数字合法性, 如果不合法, 就设为1
+                        // 先四舍五入
+                        target.value = Math.round(
+                            Number(target.value),
+                        ).toString();
+                        // 小于零的处理
+                        if (Number(target.value) < 0) {
+                            target.value = "1";
+                        }
+                        let inputVal = Number(target.value);
+
+                        num = inputVal - currentVal;
+                    } else num = 0;
+
+                    break;
+                default:
+                    num = 0;
+                    break;
+            }
+            // 请求服务器更新购物车数据;
+            try {
+                await reqAddCart(skuId, num);
+            } catch (error) {
+                alert("修改失败");
+            }
+            store.getShopCart();
+        },
+        500,
+    );
+
+    const delCart = async (skuId: number) => {
         try {
-            await reqAddCart(skuId, num);
+            const res = await reqDelShopCart(skuId);
         } catch (error) {
-            alert("修改失败");
+            alert((error as Error).message);
+        }
+        store.getShopCart();
+    };
+    const changeChecked = async (skuId: number, isChecked: boolean) => {
+        try {
+            const res = await reqChangeChecked(skuId, isChecked ? 1 : 0);
+        } catch (error) {
+            alert((error as Error).message);
+        }
+        store.getShopCart();
+    };
+    const deleteChecked = async () => {
+        try {
+            const res = await store.deleteChecked();
+            console.log(res);
+        } catch (error) {
+            alert((error as Error).message);
+        }
+        store.getShopCart();
+    };
+    const changeAllChecked = async (isChecked: boolean) => {
+        console.log(isChecked);
+        try {
+            await store.changeAllChecked(isChecked);
+        } catch (error) {
+            alert((error as Error).message);
         }
         store.getShopCart();
     };

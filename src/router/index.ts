@@ -4,8 +4,8 @@ import searchView from "../views/search/index.vue";
 import detailView from "../views/Detail/index.vue";
 import addCartView from "../views/addCart/index.vue";
 
-import registerView from "../views/register.vue";
-import loginView from "../views/login.vue";
+import registerView from "../views/Register/index.vue";
+import loginView from "../views/Login/index.vue";
 import shopCartView from "../views/ShopCart/index.vue";
 
 const router = createRouter({

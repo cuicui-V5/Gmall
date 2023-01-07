@@ -33,3 +33,22 @@ export const reqAddCart = async (skuId: number, skuNum: number) => {
 export const reqShopCart = async () => {
     return requests.get("/cart/cartList");
 };
+export const reqDelShopCart = async (skuId: number) => {
+    return requests.delete(`/cart/deleteCart/${skuId}`);
+};
+export const reqChangeChecked = async (skuId: number, isChecked: 0 | 1) => {
+    return requests.get(`/cart/checkCart/${skuId}/${isChecked}`);
+};
+// 请求验证码
+export const reqCode = async (phone: number) => {
+    return requests.get(`/user/passport/sendCode/${phone}`);
+};
+
+// 注册
+export const reqRegister = async (userInfo: {
+    phone: number;
+    password: string;
+    code: number;
+}) => {
+    return requests.post(`/user/passport/register`, userInfo, {});
+};
