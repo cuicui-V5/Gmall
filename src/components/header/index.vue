@@ -6,7 +6,7 @@
             <div class="container">
                 <div class="loginList">
                     <p>尚品汇欢迎您！</p>
-                    <p>
+                    <p v-if="!userStore.user">
                         <span>请</span>
                         <RouterLink to="/login">登录</RouterLink>
                         <RouterLink
@@ -15,6 +15,11 @@
                         >
                             免费注册
                         </RouterLink>
+                    </p>
+                    <p v-if="userStore.user">
+                        <span>欢迎 &nbsp;</span>
+                        <span>{{ userStore.user?.nickName }}</span>
+                        <a class="register">退出登录</a>
                     </p>
                 </div>
                 <div class="typeList">
@@ -70,7 +75,9 @@
     import { useRoute } from "vue-router";
     import { ref } from "vue";
     import eventBus from "@/lib/eventBus";
+    import { useUserStore } from "@/stores/user";
     const route = useRoute();
+    const userStore = useUserStore();
 
     let keyWord = ref("");
 

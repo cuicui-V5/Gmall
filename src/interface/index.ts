@@ -173,3 +173,20 @@ export interface CartInfoList {
     skuPrice: number;
     couponInfoList: any;
 }
+export interface userInfo {
+    id: number;
+    loginName: string;
+    nickName: string;
+    passwd: string;
+    name: string;
+    phoneNum: string;
+    email: any;
+    headImg: string;
+    userLevel: string;
+    status: number;
+    birthday: any;
+    gender: string;
+    createTime: string;
+    operateTime: string;
+    openId: any;
+}

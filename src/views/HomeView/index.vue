@@ -5,7 +5,7 @@
     <rank></rank>
     <like></like>
     <floor
-        v-for="floor in store.floorList"
+        v-for="floor in homeStore.floorList"
         :floor="floor"
     ></floor>
     <brand></brand>
@@ -19,8 +19,15 @@
     import floor from "./floor/index.vue";
     import brand from "./brand/index.vue";
     import { useHomeStore } from "@/stores/home";
-    const store = useHomeStore();
-    store.getFloor();
+    import { useUserStore } from "@/stores/user";
+    import { onMounted } from "vue";
+    const homeStore = useHomeStore();
+    const userStore = useUserStore();
+
+    onMounted(async () => {
+        homeStore.getFloor();
+        userStore.getUserInfo();
+    });
 </script>
 
 <style scoped lang="less"></style>

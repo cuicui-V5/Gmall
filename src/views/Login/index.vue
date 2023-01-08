@@ -24,12 +24,13 @@
                     </ul>
 
                     <div class="content">
-                        <form action="##">
+                        <form>
                             <div class="input-text clearFix">
                                 <span></span>
                                 <input
                                     type="text"
                                     placeholder="邮箱/用户名/手机号"
+                                    v-model="phone"
                                 />
                             </div>
                             <div class="input-text clearFix">
@@ -37,6 +38,7 @@
                                 <input
                                     type="text"
                                     placeholder="请输入密码"
+                                    v-model="password"
                                 />
                             </div>
                             <div class="setting clearFix">
@@ -51,7 +53,12 @@
                                 </label>
                                 <span class="forget">忘记密码？</span>
                             </div>
-                            <button class="btn">登&nbsp;&nbsp;录</button>
+                            <button
+                                class="btn"
+                                @click.prevent="login"
+                            >
+                                登&nbsp;&nbsp;录
+                            </button>
                         </form>
 
                         <div class="call clearFix">
@@ -115,7 +122,27 @@
         name: "Login",
     };
 </script>
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+    import { useUserStore } from "@/stores/user";
+    import { ref } from "vue";
+    import { useRouter } from "vue-router";
+    const store = useUserStore();
+    const phone = ref<number>();
+    const password = ref<string>();
+    const router = useRouter();
+    const login = async () => {
+        try {
+            if (phone.value && password.value) {
+                await store.login(phone.value, password.value);
+                router.push({
+                    name: "home",
+                });
+            }
+        } catch (error) {
+            alert((error as Error).message);
+        }
+    };
+</script>
 
 <style lang="less" scoped>
     .login-container {

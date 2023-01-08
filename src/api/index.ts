@@ -30,25 +30,33 @@ export const reqAddCart = async (skuId: number, skuNum: number) => {
         return Promise.reject(new Error("添加失败"));
     }
 };
-export const reqShopCart = async () => {
+export const reqShopCart = () => {
     return requests.get("/cart/cartList");
 };
-export const reqDelShopCart = async (skuId: number) => {
+export const reqDelShopCart = (skuId: number) => {
     return requests.delete(`/cart/deleteCart/${skuId}`);
 };
-export const reqChangeChecked = async (skuId: number, isChecked: 0 | 1) => {
+export const reqChangeChecked = (skuId: number, isChecked: 0 | 1) => {
     return requests.get(`/cart/checkCart/${skuId}/${isChecked}`);
 };
 // 请求验证码
-export const reqCode = async (phone: number) => {
+export const reqCode = (phone: number) => {
     return requests.get(`/user/passport/sendCode/${phone}`);
 };
 
 // 注册
-export const reqRegister = async (userInfo: {
+export const reqRegister = (userInfo: {
     phone: number;
     password: string;
     code: number;
 }) => {
     return requests.post(`/user/passport/register`, userInfo, {});
+};
+// 登录
+export const reqLogin = (userInfo: { phone: number; password: string }) => {
+    return requests.post("/user/passport/login", userInfo);
+};
+// 获取用户信息
+export const reqUserInfo = () => {
+    return requests.get("/user/passport/auth/getUserInfo");
 };
