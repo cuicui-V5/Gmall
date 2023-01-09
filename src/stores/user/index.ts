@@ -1,8 +1,14 @@
-import { reqCode, reqRegister, reqLogin, reqUserInfo } from "@/api";
+import {
+    reqCode,
+    reqRegister,
+    reqLogin,
+    reqUserInfo,
+    reqUserLogout,
+} from "@/api";
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import type { userInfo } from "@/interface/index";
-import { getToken, setToken } from "@/utils/token";
+import { getToken, setToken, clearToken } from "@/utils/token";
 
 export const useUserStore = defineStore("user", () => {
     const user = ref<userInfo>();
@@ -44,9 +50,14 @@ export const useUserStore = defineStore("user", () => {
             const res = await reqLogin(userInfo);
             if (res.data.code == 200) {
                 token.value = res.data.data.token;
+                getUserInfo();
                 // 持久化存储token
-                setToken(token.value);
-                return "ok";
+                if (token.value) {
+                    setToken(token.value);
+                    return "ok";
+                } else {
+                    return Promise.reject(new Error("fail"));
+                }
             } else {
                 return Promise.reject(new Error("fail"));
             }
@@ -63,6 +74,21 @@ export const useUserStore = defineStore("user", () => {
             return Promise.reject(error);
         }
     };
+
+    const logout = async () => {
+        try {
+            const res = await reqUserLogout();
+            if (res.data.code == 200) {
+                // 清空store与本地存储
+                user.value = undefined;
+                token.value = null;
+                clearToken();
+                return "ok";
+            } else return Promise.reject(new Error("fail"));
+        } catch (error) {
+            return Promise.reject(error);
+        }
+    };
     return {
         user,
         token,
@@ -70,5 +96,6 @@ export const useUserStore = defineStore("user", () => {
         register,
         login,
         getUserInfo,
+        logout,
     };
 });

@@ -60,3 +60,8 @@ export const reqLogin = (userInfo: { phone: number; password: string }) => {
 export const reqUserInfo = () => {
     return requests.get("/user/passport/auth/getUserInfo");
 };
+
+// 登出接口
+export const reqUserLogout = () => {
+    return requests.get("/user/passport/logout");
+};

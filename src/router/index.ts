@@ -8,6 +8,8 @@ import registerView from "../views/Register/index.vue";
 import loginView from "../views/Login/index.vue";
 import shopCartView from "../views/ShopCart/index.vue";
 
+import { useUserStore } from "@/stores/user/index";
+
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes: [
@@ -65,6 +67,16 @@ const router = createRouter({
             component: loginView,
             meta: {
                 showFooter: false,
+            },
+            beforeEnter(to, from, next) {
+                // 如果登陆了还想登录, 那么就重定向到主页
+                const store = useUserStore();
+                if (store.token) {
+                    next("/");
+                    console.log("登陆了还想登录, 那么就重定向到主页");
+                } else {
+                    next();
+                }
             },
         },
     ],

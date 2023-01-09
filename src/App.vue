@@ -11,10 +11,16 @@
     import footerVue from "@/components/footer/index.vue";
     import { useRoute } from "vue-router";
     import { useHomeStore } from "@/stores/home/index";
+    import { onMounted } from "vue";
+    import { useUserStore } from "./stores/user";
     const router = useRoute();
-    const store = useHomeStore();
+    const homeStore = useHomeStore();
+    const userStore = useUserStore();
 
-    store.getCategoryList();
+    onMounted(() => {
+        homeStore.getCategoryList();
+        userStore.getUserInfo();
+    });
 </script>
 
 <style scoped lang="less"></style>

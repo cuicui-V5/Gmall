@@ -19,7 +19,12 @@
                     <p v-if="userStore.user">
                         <span>欢迎 &nbsp;</span>
                         <span>{{ userStore.user?.nickName }}</span>
-                        <a class="register">退出登录</a>
+                        <a
+                            class="register"
+                            @click="logout"
+                        >
+                            退出登录
+                        </a>
                     </p>
                 </div>
                 <div class="typeList">
@@ -95,6 +100,14 @@
     eventBus.on("clearKeyword", () => {
         keyWord.value = "";
     });
+
+    const logout = async () => {
+        try {
+            await userStore.logout();
+        } catch (error) {
+            alert((error as Error).message);
+        }
+    };
 </script>
 
 <style scoped lang="less">
