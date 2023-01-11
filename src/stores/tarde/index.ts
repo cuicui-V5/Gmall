@@ -7,7 +7,12 @@ export const useTradeStore = defineStore("trade", () => {
     const userAddressList = computed(() => {
         if (tardeInfo.value) {
             return tardeInfo.value.userAddressList;
-        }
+        } else return [];
+    });
+    const orderInfo = computed(() => {
+        if (tardeInfo.value) {
+            return tardeInfo.value.detailArrayList;
+        } else return [];
     });
     const getTradeInfo = async () => {
         const res = await reqTardeInfo();
@@ -20,5 +25,6 @@ export const useTradeStore = defineStore("trade", () => {
         tardeInfo,
         userAddressList,
         getTradeInfo,
+        orderInfo,
     };
 });

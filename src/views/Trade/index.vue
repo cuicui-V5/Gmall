@@ -6,7 +6,6 @@
             <div
                 class="address clearFix"
                 v-for="address in userAddressList"
-                v-if="userAddressList"
             >
                 <span
                     class="username"
@@ -50,24 +49,26 @@
             </div>
             <div class="detail">
                 <h5>商品清单</h5>
-                <ul class="list clearFix">
+                <ul
+                    class="list clearFix"
+                    v-for="item in orderInfo"
+                >
                     <li>
                         <img
-                            src="./images/goods.png"
-                            alt=""
+                            :src="item.imgUrl"
+                            width="100"
                         />
                     </li>
                     <li>
                         <p>
-                            Apple iPhone 6s (A1700) 64G 玫瑰金色
-                            移动联通电信4G手机硅胶透明防摔软壳 本色系列
+                            {{ item.skuName }}
                         </p>
                         <h4>7天无理由退货</h4>
                     </li>
                     <li>
-                        <h3>￥5399.00</h3>
+                        <h3>￥{{ item.orderPrice }}.00</h3>
                     </li>
-                    <li>X1</li>
+                    <li>X{{ item.skuNum }}</li>
                     <li>有货</li>
                 </ul>
             </div>
@@ -76,6 +77,7 @@
                 <textarea
                     placeholder="建议留言前先与商家沟通确认"
                     class="remarks-cont"
+                    v-model="message"
                 ></textarea>
             </div>
             <div class="line"></div>
@@ -89,10 +91,10 @@
             <ul>
                 <li>
                     <b>
-                        <i>1</i>
+                        <i>{{ tardeInfo?.totalNum }}</i>
                         件商品，总商品金额
                     </b>
-                    <span>¥5399.00</span>
+                    <span>¥{{ tardeInfo?.totalAmount }}.00</span>
                 </li>
                 <li>
                     <b>返现：</b>
@@ -107,14 +109,14 @@
         <div class="trade">
             <div class="price">
                 应付金额:　
-                <span>¥5399.00</span>
+                <span>¥{{ tardeInfo?.totalAmount }}.00</span>
             </div>
             <div class="receiveInfo">
                 寄送至:
-                <span>北京市昌平区宏福科技园综合楼6层</span>
+                <span>{{ currentAddress?.fullAddress }}</span>
                 收货人：
-                <span>张三</span>
-                <span>15010658793</span>
+                <span>{{ currentAddress?.consignee }}</span>
+                <span>{{ currentAddress?.phoneNum }}</span>
             </div>
         </div>
         <div class="sub clearFix">
@@ -137,10 +139,12 @@
 <script setup lang="ts">
     import { useTradeStore } from "@/stores/tarde";
     import { storeToRefs } from "pinia";
-    import { onMounted } from "vue";
-    import type { UserAddressList } from "@/interface";
+    import { computed, onMounted, ref } from "vue";
+    import type { UserAddressList, DetailArrayList } from "@/interface";
     const store = useTradeStore();
-    const { tardeInfo, userAddressList } = storeToRefs(store);
+    const { tardeInfo, userAddressList, orderInfo } = storeToRefs(store);
+
+    const message = ref("");
     onMounted(() => {
         store.getTradeInfo();
     });
@@ -149,11 +153,18 @@
         address: UserAddressList,
         userAddressList: UserAddressList[],
     ) => {
-        userAddressList.forEach((item) => {
-            item.isDefault = "0";
-        });
-        address.isDefault = "1";
+        if (userAddressList) {
+            userAddressList.forEach((item) => {
+                item.isDefault = "0";
+            });
+            address.isDefault = "1";
+        }
     };
+    const currentAddress = computed(() => {
+        return userAddressList.value.find((item) => {
+            return item.isDefault == "1";
+        });
+    });
 </script>
 
 <style lang="less" scoped>
