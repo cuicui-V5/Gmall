@@ -65,3 +65,14 @@ export const reqUserInfo = () => {
 export const reqUserLogout = () => {
     return requests.get("/user/passport/logout");
 };
+
+// 获取收货地址
+
+export const reqAddress = () => {
+    return requests.get("/user/userAddress/auth/findUserAddressList");
+};
+
+// 获取订单页信息
+export const reqTardeInfo = () => {
+    return requests.get("/order/auth/trade");
+};

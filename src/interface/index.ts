@@ -190,3 +190,74 @@ export interface userInfo {
     operateTime: string;
     openId: any;
 }
+
+export interface tradeInfoType {
+    totalAmount: number;
+    userAddressList: UserAddressList[];
+    tradeNo: string;
+    totalNum: number;
+    originalTotalAmount: number;
+    couponInfoList: any[];
+    detailArrayList: DetailArrayList[];
+    activityReduceAmount: number;
+    orderDetailVoList: OrderDetailVoList[];
+}
+
+export interface UserAddressList {
+    id: number;
+    userAddress: string;
+    userId: number;
+    provinceId: number;
+    consignee: string;
+    phoneNum: string;
+    isDefault: string;
+    regionId: number;
+    fullAddress: string;
+}
+
+export interface DetailArrayList {
+    id: any;
+    orderId: any;
+    skuId: number;
+    skuName: string;
+    imgUrl: string;
+    orderPrice: number;
+    skuNum: number;
+    createTime: any;
+    sourceType: string;
+    sourceId: number;
+    splitTotalAmount: any;
+    splitActivityAmount: any;
+    splitCouponAmount: any;
+    refundStatus: string;
+    refundStatusString: string;
+    hasStock: any;
+    activityRule: any;
+    couponInfoList: any;
+}
+
+export interface OrderDetailVoList {
+    orderDetailList: OrderDetailList[];
+    activityRule: any;
+}
+
+export interface OrderDetailList {
+    id: any;
+    orderId: any;
+    skuId: number;
+    skuName: string;
+    imgUrl: string;
+    orderPrice: number;
+    skuNum: number;
+    createTime: any;
+    sourceType: string;
+    sourceId: number;
+    splitTotalAmount: any;
+    splitActivityAmount: any;
+    splitCouponAmount: any;
+    refundStatus: string;
+    refundStatusString: string;
+    hasStock: any;
+    activityRule: any;
+    couponInfoList: any;
+}

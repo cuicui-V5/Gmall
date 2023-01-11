@@ -127,13 +127,14 @@
                     <i class="summoney">{{ totalPrice }}.00</i>
                 </div>
                 <div class="sumbtn">
-                    <a
+                    <RouterLink
                         class="sum-btn"
-                        href="###"
-                        target="_blank"
+                        :to="{
+                            name: `trade`,
+                        }"
                     >
                         结算
-                    </a>
+                    </RouterLink>
                 </div>
             </div>
         </div>

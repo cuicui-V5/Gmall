@@ -68,6 +68,11 @@ export const useUserStore = defineStore("user", () => {
     const getUserInfo = async () => {
         try {
             const res = await reqUserInfo();
+            if (res.data.code !== 200) {
+                // 说明登陆过期清除token
+                clearToken();
+                token.value = "";
+            }
             user.value = res.data.data;
         } catch (error) {
             alert((error as Error).message);
