@@ -120,12 +120,12 @@
             </div>
         </div>
         <div class="sub clearFix">
-            <router-link
+            <a
                 class="subBtn"
-                to="/pay"
+                @click="pay"
             >
                 提交订单
-            </router-link>
+            </a>
         </div>
     </div>
 </template>
@@ -141,7 +141,10 @@
     import { storeToRefs } from "pinia";
     import { computed, onMounted, ref } from "vue";
     import type { UserAddressList, DetailArrayList } from "@/interface";
+    import { reqSubmitOrder } from "@/api";
+    import { useRouter } from "vue-router";
     const store = useTradeStore();
+    const router = useRouter();
     const { tardeInfo, userAddressList, orderInfo } = storeToRefs(store);
 
     const message = ref("");
@@ -165,6 +168,34 @@
             return item.isDefault == "1";
         });
     });
+    const pay = async () => {
+        try {
+            if (tardeInfo.value && currentAddress.value) {
+                const data = {
+                    consignee: currentAddress.value.consignee,
+                    consigneeTel: currentAddress.value.phoneNum,
+                    deliveryAddress: currentAddress.value.fullAddress,
+                    paymentWay: "ONLINE",
+                    orderComment: message.value,
+                    orderDetailList: tardeInfo.value.detailArrayList,
+                };
+                const res = await reqSubmitOrder(tardeInfo.value.tradeNo, data);
+                console.log(res);
+                if (res.data.code !== 200) {
+                    alert("支付失败" + res.data.message);
+                } else {
+                    router.push({
+                        name: "pay",
+                        query: {
+                            orderId: res.data.data,
+                        },
+                    });
+                }
+            }
+        } catch (error) {
+            alert("支付失败" + (error as Error).message);
+        }
+    };
 </script>
 
 <style lang="less" scoped>

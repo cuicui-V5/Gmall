@@ -76,3 +76,24 @@ export const reqAddress = () => {
 export const reqTardeInfo = () => {
     return requests.get("/order/auth/trade");
 };
+// 提交订单
+export const reqSubmitOrder = (
+    tradeNo: string,
+    data: {
+        consignee: string;
+        consigneeTel: string;
+        deliveryAddress: string;
+        paymentWay: string;
+        orderComment: string;
+        orderDetailList: Array<{}>;
+    },
+) => {
+    return requests.post(`/order/auth/submitOrder?tradeNo=${tradeNo}`, data);
+};
+
+// 17. 获取订单支付信息
+// /payment/eiinwx/createNative/{ orderId };
+
+export const reqPay = (orderId: string) => {
+    return requests.get(`/payment/weixin/createNative/${orderId}`);
+};

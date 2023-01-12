@@ -8,6 +8,7 @@ import registerView from "../views/Register/index.vue";
 import loginView from "../views/Login/index.vue";
 import shopCartView from "../views/ShopCart/index.vue";
 import tradeView from "../views/Trade/index.vue";
+import payView from "../views/Pay/index.vue";
 
 import { useUserStore } from "@/stores/user/index";
 
@@ -58,6 +59,14 @@ const router = createRouter({
             path: "/trade",
             name: "trade",
             component: tradeView,
+            meta: {
+                showFooter: true,
+            },
+        },
+        {
+            path: "/pay",
+            name: "pay",
+            component: payView,
             meta: {
                 showFooter: true,
             },
