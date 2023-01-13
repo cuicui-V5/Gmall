@@ -97,3 +97,8 @@ export const reqSubmitOrder = (
 export const reqPay = (orderId: string) => {
     return requests.get(`/payment/weixin/createNative/${orderId}`);
 };
+
+// 查询支付状态
+export const reqPayStatus = (orderId: string) => {
+    return requests.get(`/payment/weixin/queryPayStatus/${orderId}`);
+};

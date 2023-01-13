@@ -9,6 +9,11 @@ import loginView from "../views/Login/index.vue";
 import shopCartView from "../views/ShopCart/index.vue";
 import tradeView from "../views/Trade/index.vue";
 import payView from "../views/Pay/index.vue";
+import paySuccessView from "../views/PaySuccess/index.vue";
+import centerView from "../views/Center/index.vue";
+// 二级路由
+import myOrderView from "../views/Center/myOrder.vue";
+import groupView from "../views/Center/group.vue";
 
 import { useUserStore } from "@/stores/user/index";
 
@@ -70,6 +75,35 @@ const router = createRouter({
             meta: {
                 showFooter: true,
             },
+        },
+        {
+            path: "/paySuccess",
+            name: "paySuccess",
+            component: paySuccessView,
+            meta: {
+                showFooter: true,
+            },
+        },
+        {
+            path: "/center",
+            name: "center",
+            component: centerView,
+            meta: {
+                showFooter: true,
+            },
+            redirect: "/center/myOrder",
+            children: [
+                {
+                    path: "/center/myOrder",
+                    name: "myOrder",
+                    component: myOrderView,
+                },
+                {
+                    path: "/center/group",
+                    name: "group",
+                    component: groupView,
+                },
+            ],
         },
         {
             path: "/register",

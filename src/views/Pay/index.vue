@@ -108,7 +108,6 @@
             </div>
         </div>
     </div>
-    elb
 </template>
 
 <script lang="ts">
@@ -117,19 +116,29 @@
     };
 </script>
 <script setup lang="ts">
-    import { reqPay } from "@/api";
-    import { computed, onMounted } from "vue";
-    import { useRoute } from "vue-router";
+    import "element-plus/es/components/message-box/style/css";
+    import "element-plus/es/components/message/style/css";
+
+    import { ElMessageBox, ElMessage } from "element-plus";
+    import QRCode from "qrcode";
+    import { reqPay, reqPayStatus } from "@/api";
+    import { computed, onMounted, onUnmounted } from "vue";
+    import { RouterLink, useRoute } from "vue-router";
+    import router from "@/router";
     const route = useRoute();
 
     const orderId = computed(() => {
         return route.query.orderId as string;
     });
+    let payUrl = "";
+    let timer: NodeJS.Timeout | undefined = undefined;
+    let status = 0;
+
     const getPayInfo = async () => {
         try {
             const res = await reqPay(orderId.value);
             console.log(res);
-
+            payUrl = res.data.data.codeUrl;
             if (res.data.code == 200) {
             } else {
                 alert("失败" + res.data.message);
@@ -141,7 +150,70 @@
     onMounted(() => {
         getPayInfo();
     });
-    const pay = () => {};
+    const pay = async () => {
+        // 首先生成二维码
+        const url = await QRCode.toDataURL(payUrl);
+        console.log(url);
+
+        ElMessageBox.alert(`<img src="${url}" />`, "请支付", {
+            dangerouslyUseHTMLString: true,
+            center: true,
+            showClose: false,
+            cancelButtonText: "支付遇到问题",
+            confirmButtonText: "我已支付成功",
+            showCancelButton: true,
+            // 判断点了确定还是取消
+            beforeClose(action, instance, done) {
+                if (action == "confirm") {
+                    if (status == 200) {
+                        // 清空定时器
+                        clearInterval(timer);
+                        // 关闭对话框
+                        ElMessageBox.close();
+                        // 路由跳转到成功页面
+                        router.push({
+                            name: "paySuccess",
+                        });
+                    } else {
+                        ElMessage({
+                            type: "warning",
+                            message: "您还未支付",
+                        });
+                    }
+                } else {
+                    clearInterval(timer);
+
+                    done();
+                    ElMessage({
+                        type: "info",
+                        message: "支付遇到问题请联系管理员",
+                    });
+                }
+            },
+        });
+        // 开启定时器轮询支付结果
+        timer = setInterval(async () => {
+            const res = await reqPayStatus(orderId.value);
+            status = res.data.code;
+            if (res.data.code == 200) {
+                // 支付成功
+                console.log("支付成功");
+                // 清空定时器
+                clearInterval(timer);
+                // 关闭对话框
+                ElMessageBox.close();
+                // 路由跳转到成功页面
+                router.push({
+                    name: "paySuccess",
+                });
+            } else {
+                console.log("等待支付成功");
+            }
+        }, 1000);
+    };
+    onUnmounted(() => {
+        clearInterval(timer);
+    });
 </script>
 
 <style lang="less" scoped>
