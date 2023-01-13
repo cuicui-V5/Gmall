@@ -102,3 +102,8 @@ export const reqPay = (orderId: string) => {
 export const reqPayStatus = (orderId: string) => {
     return requests.get(`/payment/weixin/queryPayStatus/${orderId}`);
 };
+
+// 获取个人中心 /order/auth/{page}/{limit}
+export const reqCenter = (page: number, limit = 5) => {
+    return requests.get(`/order/auth/${page}/${limit}`);
+};
