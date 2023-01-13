@@ -138,5 +138,15 @@ const router = createRouter({
         };
     },
 });
+router.beforeEach((to, from, next) => {
+    const store = useUserStore();
 
+    // 如果未登录且要去有权限的路由, 那么就跳转到登录
+    const pattern = /pay|center|trade/;
+
+    if (pattern.test(to.path) && !store.token) {
+        // 如果包含了上述关键词, 那么就跳转到登陆界面
+        next(`/login?redirect=${to.path}`);
+    } else next();
+});
 export default router;

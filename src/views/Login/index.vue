@@ -125,18 +125,28 @@
 <script lang="ts" setup>
     import { useUserStore } from "@/stores/user";
     import { ref } from "vue";
-    import { useRouter } from "vue-router";
+    import { useRoute, useRouter } from "vue-router";
     const store = useUserStore();
     const phone = ref<number>();
     const password = ref<string>();
     const router = useRouter();
+    const route = useRoute();
     const login = async () => {
         try {
             if (phone.value && password.value) {
                 await store.login(phone.value, password.value);
-                router.push({
-                    name: "home",
-                });
+                // 如果url中有重定向的位置, 那么就跳转到本来要去的位置
+                if (route.query.redirect) {
+                    console.log(route.query.redirect);
+
+                    router.push({
+                        path: route.query.redirect as string,
+                    });
+                } else {
+                    router.push({
+                        name: "home",
+                    });
+                }
             }
         } catch (error) {
             alert((error as Error).message);
