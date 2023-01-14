@@ -1,72 +1,86 @@
 <template>
     <div class="register-container">
         <!-- 注册内容 -->
-        <div class="register">
-            <h3>
-                注册新用户
-                <span class="go">
-                    我有账号，去
-                    <a
-                        href="login.html"
-                        target="_blank"
+        <Form
+            v-slot="{ errors }"
+            ref="fromValidate"
+        >
+            <div class="register">
+                <h3>
+                    注册新用户
+                    <span class="go">
+                        我有账号，去
+                        <a
+                            href="login.html"
+                            target="_blank"
+                        >
+                            登陆
+                        </a>
+                    </span>
+                </h3>
+                <div class="content">
+                    <label>手机号:</label>
+                    <Field
+                        type="text"
+                        placeholder="请输入你的手机号"
+                        v-model="phone"
+                        name="phone"
+                        :rules="checkPhone"
+                    />
+                    <span class="error-msg">{{ errors.phone }}</span>
+                </div>
+                <div class="content">
+                    <label>验证码:</label>
+                    <Field
+                        type="text"
+                        placeholder="请输入验证码"
+                        v-model="code"
+                        name="code"
+                        :rules="checkCode"
+                    />
+                    <button
+                        style="width: 100px; height: 50px"
+                        @click="getCode"
                     >
-                        登陆
-                    </a>
-                </span>
-            </h3>
-            <div class="content">
-                <label>手机号:</label>
-                <input
-                    type="text"
-                    placeholder="请输入你的手机号"
-                    v-model="phone"
-                />
-                <span class="error-msg">错误提示信息</span>
+                        获取验证码
+                    </button>
+                    <span class="error-msg">{{ errors.code }}</span>
+                </div>
+                <div class="content">
+                    <label>登录密码:</label>
+                    <Field
+                        type="text"
+                        placeholder="请输入你的登录密码"
+                        v-model="password"
+                        name="password"
+                        :rules="checkPassword"
+                    />
+                    <span class="error-msg">{{ errors.password }}</span>
+                </div>
+                <div class="content">
+                    <label>确认密码:</label>
+                    <Field
+                        type="text"
+                        placeholder="请输入确认密码"
+                        name="rePassword"
+                        :rules="checkRePassword"
+                    />
+                    <span class="error-msg">{{ errors.rePassword }}</span>
+                </div>
+                <div class="controls">
+                    <Field
+                        name="m1"
+                        type="checkbox"
+                        :rules="checkAgree"
+                    />
+                    <span>同意协议并注册《尚品汇用户协议》</span>
+                    <span class="error-msg">{{ errors.m1 }}</span>
+                </div>
+                <div class="btn">
+                    <button @click="register">完成注册</button>
+                </div>
             </div>
-            <div class="content">
-                <label>验证码:</label>
-                <input
-                    type="text"
-                    placeholder="请输入验证码"
-                    v-model="code"
-                />
-                <button
-                    style="width: 100px; height: 50px"
-                    @click="getCode"
-                >
-                    获取验证码
-                </button>
-                <span class="error-msg">错误提示信息</span>
-            </div>
-            <div class="content">
-                <label>登录密码:</label>
-                <input
-                    type="text"
-                    placeholder="请输入你的登录密码"
-                    v-model="password"
-                />
-                <span class="error-msg">错误提示信息</span>
-            </div>
-            <div class="content">
-                <label>确认密码:</label>
-                <input
-                    type="text"
-                    placeholder="请输入确认密码"
-                />
-                <span class="error-msg">错误提示信息</span>
-            </div>
-            <div class="controls">
-                <input
-                    name="m1"
-                    type="checkbox"
-                />
-                <span>同意协议并注册《尚品汇用户协议》</span>
-                <span class="error-msg">错误提示信息</span>
-            </div>
-            <div class="btn">
-                <button @click="register">完成注册</button>
-            </div>
-        </div>
+        </Form>
 
         <!-- 底部 -->
         <div class="copyright">
@@ -92,6 +106,7 @@
     };
 </script>
 <script lang="ts" setup>
+    import { Form, Field } from "vee-validate";
     import { useUserStore } from "@/stores/user";
     import { ref } from "vue";
     import { useRouter } from "vue-router";
@@ -102,6 +117,8 @@
     const phone = ref<number>();
     const code = ref<number>();
     const password = ref<string>();
+
+    const fromValidate = ref<any>();
 
     const getCode = async () => {
         try {
@@ -115,14 +132,76 @@
     };
     const register = async () => {
         try {
-            if (phone.value && password.value && code.value) {
-                await store.register(phone.value, password.value, code.value);
-                router.push({
-                    name: "login",
-                });
+            // 先验证是否全部通过
+            const { valid } = await fromValidate.value.validate();
+            if (valid) {
+                if (phone.value && password.value && code.value) {
+                    await store.register(
+                        phone.value,
+                        password.value,
+                        code.value,
+                    );
+                    router.push({
+                        name: "login",
+                    });
+                }
             }
         } catch (error) {
             console.log((error as Error).message);
+        }
+    };
+
+    // 验证规则
+    const checkPhone = (val: unknown) => {
+        const phoneReg = /^1[356789][\d]{9}$/;
+        if (!val) {
+            return "请输入手机号";
+        } else {
+            if (phoneReg.test(val as string)) {
+                return true;
+            } else {
+                return "手机号不合法";
+            }
+        }
+    };
+    const checkCode = (val: unknown) => {
+        if (!val) {
+            return "请输入验证码";
+        } else {
+            if (/^\d{6}$/.test(val as string)) {
+                return true;
+            } else {
+                return "验证码不合法";
+            }
+        }
+    };
+    const checkPassword = (val: unknown) => {
+        if (!val) {
+            return "请输入密码";
+        } else {
+            if (/^\w{6,16}$/.test(val as string)) {
+                return true;
+            } else {
+                return "密码不合法";
+            }
+        }
+    };
+    const checkRePassword = (val: unknown) => {
+        if (!val) {
+            return "请重复密码";
+        } else {
+            if (val === password.value) {
+                return true;
+            } else {
+                return "请输入相同密码";
+            }
+        }
+    };
+    const checkAgree = (val: unknown) => {
+        if (val) {
+            return "请同意协议";
+        } else {
+            return true;
         }
     };
 </script>

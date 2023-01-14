@@ -24,22 +24,34 @@
                     </ul>
 
                     <div class="content">
-                        <form>
+                        <!-- 作用域插槽, 解构出错误信息 -->
+                        <Form
+                            v-slot="{ errors }"
+                            ref="fromValidate"
+                        >
                             <div class="input-text clearFix">
                                 <span></span>
-                                <input
+                                <Field
                                     type="text"
                                     placeholder="邮箱/用户名/手机号"
                                     v-model="phone"
+                                    name="account"
+                                    :rules="checkAccount"
                                 />
+                                <h1 style="color: red">{{ errors.account }}</h1>
                             </div>
                             <div class="input-text clearFix">
                                 <span class="pwd"></span>
-                                <input
+                                <Field
                                     type="text"
                                     placeholder="请输入密码"
                                     v-model="password"
+                                    name="password"
+                                    :rules="checkPassword"
                                 />
+                                <h1 style="color: red">
+                                    {{ errors.password }}
+                                </h1>
                             </div>
                             <div class="setting clearFix">
                                 <label class="checkbox inline">
@@ -59,7 +71,7 @@
                             >
                                 登&nbsp;&nbsp;录
                             </button>
-                        </form>
+                        </Form>
 
                         <div class="call clearFix">
                             <ul>
@@ -123,6 +135,8 @@
     };
 </script>
 <script lang="ts" setup>
+    import { Form, Field } from "vee-validate";
+
     import { useUserStore } from "@/stores/user";
     import { ref } from "vue";
     import { useRoute, useRouter } from "vue-router";
@@ -131,27 +145,54 @@
     const password = ref<string>();
     const router = useRouter();
     const route = useRoute();
+    const fromValidate = ref(null) as any;
     const login = async () => {
         try {
-            if (phone.value && password.value) {
-                await store.login(phone.value, password.value);
-                // 因为用了await. 所以一定执行完了store里面的方法存储了token之后才会路由跳转
+            const { valid } = await fromValidate.value?.validate();
+            console.log(valid);
 
-                // 如果url中有重定向的位置, 那么就跳转到本来要去的位置
-                if (route.query.redirect) {
-                    console.log(route.query.redirect);
+            if (valid) {
+                // 如果验证通过进行下一步
+                if (phone.value && password.value) {
+                    await store.login(phone.value, password.value);
+                    // 因为用了await. 所以一定执行完了store里面的方法存储了token之后才会路由跳转
 
-                    router.push({
-                        path: route.query.redirect as string,
-                    });
-                } else {
-                    router.push({
-                        name: "home",
-                    });
+                    // 如果url中有重定向的位置, 那么就跳转到本来要去的位置
+                    if (route.query.redirect) {
+                        console.log(route.query.redirect);
+
+                        router.push({
+                            path: route.query.redirect as string,
+                        });
+                    } else {
+                        router.push({
+                            name: "home",
+                        });
+                    }
                 }
             }
         } catch (error) {
             alert((error as Error).message);
+        }
+    };
+    // 定义验证规则
+    const checkAccount = (val: unknown) => {
+        const reg = /^[\a-zA-Z0-9_]+$/;
+        if (!val) {
+            return "请输入账号";
+        } else {
+            if (reg.test(val as string)) {
+                return true;
+            } else {
+                return "账号不合法 请输入6-16位数字字母下划线";
+            }
+        }
+    };
+    const checkPassword = (val: unknown) => {
+        if (!val) {
+            return "请输入密码";
+        } else {
+            return true;
         }
     };
 </script>
