@@ -135,6 +135,8 @@
         try {
             if (phone.value && password.value) {
                 await store.login(phone.value, password.value);
+                // 因为用了await. 所以一定执行完了store里面的方法存储了token之后才会路由跳转
+
                 // 如果url中有重定向的位置, 那么就跳转到本来要去的位置
                 if (route.query.redirect) {
                     console.log(route.query.redirect);

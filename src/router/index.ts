@@ -1,16 +1,11 @@
-import { createRouter, createWebHistory } from "vue-router";
+import {
+    createRouter,
+    createWebHistory,
+    createWebHashHistory,
+} from "vue-router";
 import HomeView from "../views/HomeView/index.vue";
 import searchView from "../views/search/index.vue";
 import detailView from "../views/Detail/index.vue";
-import addCartView from "../views/addCart/index.vue";
-
-import registerView from "../views/Register/index.vue";
-import loginView from "../views/Login/index.vue";
-import shopCartView from "../views/ShopCart/index.vue";
-import tradeView from "../views/Trade/index.vue";
-import payView from "../views/Pay/index.vue";
-import paySuccessView from "../views/PaySuccess/index.vue";
-import centerView from "../views/Center/index.vue";
 // 二级路由
 import myOrderView from "../views/Center/myOrder.vue";
 import groupView from "../views/Center/group.vue";
@@ -18,7 +13,8 @@ import groupView from "../views/Center/group.vue";
 import { useUserStore } from "@/stores/user/index";
 
 const router = createRouter({
-    history: createWebHistory(import.meta.env.BASE_URL),
+    // history: createWebHistory(import.meta.env.BASE_URL),
+    history: createWebHashHistory(),
     routes: [
         {
             path: "/",
@@ -47,7 +43,7 @@ const router = createRouter({
         {
             path: "/addCart",
             name: "addCart",
-            component: addCartView,
+            component: () => import("@/views/addCart/index.vue"),
             meta: {
                 showFooter: true,
             },
@@ -55,7 +51,7 @@ const router = createRouter({
         {
             path: "/shopCart",
             name: "shopCart",
-            component: shopCartView,
+            component: () => import("@/views/ShopCart/index.vue"),
             meta: {
                 showFooter: true,
             },
@@ -63,23 +59,37 @@ const router = createRouter({
         {
             path: "/trade",
             name: "trade",
-            component: tradeView,
+            component: () => import("@/views/Trade/index.vue"),
+
             meta: {
                 showFooter: true,
+            },
+            // 除非购物车来的, 否则不让进入trade
+            beforeEnter(to, from, next) {
+                if (from.path !== "/shopCart") {
+                    next(false);
+                } else next();
             },
         },
         {
             path: "/pay",
             name: "pay",
-            component: payView,
+            component: () => import("@/views/Pay/index.vue"),
+
             meta: {
                 showFooter: true,
+            },
+            beforeEnter(to, from, next) {
+                if (from.path !== "/trade") {
+                    next(false);
+                } else next();
             },
         },
         {
             path: "/paySuccess",
             name: "paySuccess",
-            component: paySuccessView,
+            component: () => import("@/views/PaySuccess/index.vue"),
+
             meta: {
                 showFooter: true,
             },
@@ -87,7 +97,8 @@ const router = createRouter({
         {
             path: "/center",
             name: "center",
-            component: centerView,
+            component: () => import("@/views/Center/index.vue"),
+
             meta: {
                 showFooter: true,
             },
@@ -108,7 +119,8 @@ const router = createRouter({
         {
             path: "/register",
             name: "register",
-            component: registerView,
+            component: () => import("@/views/Register/index.vue"),
+
             meta: {
                 showFooter: false,
             },
@@ -116,16 +128,17 @@ const router = createRouter({
         {
             path: "/login",
             name: "login",
-            component: loginView,
+            component: () => import("@/views/Login/index.vue"),
+
             meta: {
                 showFooter: false,
             },
             beforeEnter(to, from, next) {
-                // 如果登陆了还想登录, 那么就重定向到主页
+                // 如果登陆了还想登录, 那么就不进行跳转
                 const store = useUserStore();
                 if (store.token) {
-                    next("/");
-                    console.log("登陆了还想登录, 那么就重定向到主页");
+                    next(false);
+                    console.log("登陆了还想登录, 那么就不进行路由");
                 } else {
                     next();
                 }
@@ -140,12 +153,14 @@ const router = createRouter({
 });
 router.beforeEach((to, from, next) => {
     const store = useUserStore();
+    console.log(to.path, from.path);
 
     // 如果未登录且要去有权限的路由, 那么就跳转到登录
     const pattern = /pay|center|trade/;
 
     if (pattern.test(to.path) && !store.token) {
         // 如果包含了上述关键词, 那么就跳转到登陆界面
+        // 注意携带原本要去的地址,
         next(`/login?redirect=${to.path}`);
     } else next();
 });

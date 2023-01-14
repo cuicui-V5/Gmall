@@ -32,6 +32,11 @@
 <script lang="ts">
     export default {
         name: "PaySuccess",
+        beforeRouteEnter: (to, from, next) => {
+            if (from.path !== "/pay") {
+                next(false);
+            } else next();
+        },
     };
 </script>
 
